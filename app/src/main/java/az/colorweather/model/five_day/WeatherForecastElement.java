@@ -1,9 +1,15 @@
 
-package az.colorweather.model;
+package az.colorweather.model.five_day;
 
 import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import az.colorweather.model.common.Clouds;
+import az.colorweather.model.common.Main;
+import az.colorweather.model.common.Rain;
+import az.colorweather.model.common.Weather;
+import az.colorweather.model.common.Wind;
 
 public class WeatherForecastElement {
 

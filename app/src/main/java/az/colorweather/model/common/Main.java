@@ -1,5 +1,5 @@
 
-package az.colorweather.model;
+package az.colorweather.model.common;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
