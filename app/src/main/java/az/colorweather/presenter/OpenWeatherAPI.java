@@ -11,7 +11,9 @@ import retrofit.http.Query;
 
 public interface OpenWeatherAPI {
     @GET("forecast?")
-    Call<ExtendedWeather> loadExtendedWeather(@Query("lat") int lat,
-                                              @Query("lon") int lon,
-                                              @Query("appid") String appId);
+    Call<ExtendedWeather> loadExtendedWeather(@Query("lat") double lat,
+                                              @Query("lon") double lon,
+                                              @Query("appid") String appId,
+                                              @Query("units") String units,
+                                              @Query("lang") String lang);
 }

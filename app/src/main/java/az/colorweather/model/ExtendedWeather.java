@@ -21,7 +21,7 @@ public class ExtendedWeather {
     private Integer cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<az.colorweather.model.List> list = new ArrayList<az.colorweather.model.List>();
+    private java.util.List<WeatherForecastElement> weatherForecastElement = new ArrayList<WeatherForecastElement>();
 
     /**
      * 
@@ -100,17 +100,17 @@ public class ExtendedWeather {
      * @return
      *     The list
      */
-    public java.util.List<az.colorweather.model.List> getList() {
-        return list;
+    public java.util.List<WeatherForecastElement> getList() {
+        return weatherForecastElement;
     }
 
     /**
      * 
-     * @param list
+     * @param weatherForecastElement
      *     The list
      */
-    public void setList(java.util.List<az.colorweather.model.List> list) {
-        this.list = list;
+    public void setList(java.util.List<WeatherForecastElement> weatherForecastElement) {
+        this.weatherForecastElement = weatherForecastElement;
     }
 
 }
