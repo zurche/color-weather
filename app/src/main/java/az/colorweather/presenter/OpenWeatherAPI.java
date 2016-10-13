@@ -1,4 +1,4 @@
-package az.colorweather;
+package az.colorweather.presenter;
 
 import az.colorweather.model.ExtendedWeather;
 import retrofit.Call;
