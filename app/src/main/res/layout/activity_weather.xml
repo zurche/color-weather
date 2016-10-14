@@ -11,7 +11,14 @@
     tools:context="az.colorweather.view.WeatherActivity">
 
     <TextView
+        android:id="@+id/current_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        tools:text="58°"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp" />
+
+    <include layout="@layout/five_day_forecast_layout"/>
+
 </RelativeLayout>

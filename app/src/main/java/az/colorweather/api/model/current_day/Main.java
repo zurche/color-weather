@@ -1,5 +1,5 @@
 
-package az.colorweather.model.current_day;
+package az.colorweather.api.model.current_day;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

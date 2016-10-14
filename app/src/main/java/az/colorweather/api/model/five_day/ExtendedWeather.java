@@ -1,11 +1,11 @@
 
-package az.colorweather.model.five_day;
+package az.colorweather.api.model.five_day;
 
 import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import az.colorweather.model.common.City;
+import az.colorweather.api.model.common.City;
 
 public class ExtendedWeather {
 

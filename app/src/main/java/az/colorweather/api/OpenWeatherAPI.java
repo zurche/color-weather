@@ -1,7 +1,7 @@
-package az.colorweather.presenter;
+package az.colorweather.api;
 
-import az.colorweather.model.current_day.CurrentWeather;
-import az.colorweather.model.five_day.ExtendedWeather;
+import az.colorweather.api.model.current_day.CurrentWeather;
+import az.colorweather.api.model.five_day.ExtendedWeather;
 import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Query;

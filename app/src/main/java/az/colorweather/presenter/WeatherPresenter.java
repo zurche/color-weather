@@ -3,8 +3,9 @@ package az.colorweather.presenter;
 import android.util.Log;
 
 import az.colorweather.WeatherContract;
-import az.colorweather.model.current_day.CurrentWeather;
-import az.colorweather.model.five_day.ExtendedWeather;
+import az.colorweather.api.OpenWeatherAPI;
+import az.colorweather.api.model.current_day.CurrentWeather;
+import az.colorweather.api.model.five_day.ExtendedWeather;
 import az.colorweather.utils.OWSupportedLanguages;
 import az.colorweather.utils.OWSupportedUnits;
 import retrofit.Call;

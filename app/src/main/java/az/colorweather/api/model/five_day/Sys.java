@@ -1,4 +1,4 @@
-package az.colorweather.model.five_day;
+package az.colorweather.api.model.five_day;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
