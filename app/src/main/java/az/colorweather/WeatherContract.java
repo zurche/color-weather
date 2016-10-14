@@ -1,6 +1,6 @@
 package az.colorweather;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import az.colorweather.api.model.current_day.CurrentWeather;
 import az.colorweather.api.model.five_day.WeatherForecastElement;
@@ -12,7 +12,7 @@ import az.colorweather.api.model.five_day.WeatherForecastElement;
 public interface WeatherContract {
 
     interface View {
-        void updateFiveDayForecast(List<WeatherForecastElement> weatherForecastElement);
+        void updateFiveDayForecast(ArrayList<WeatherForecastElement> weatherForecastElement);
 
         void updateCurrentWeather(CurrentWeather currentWeather);
     }

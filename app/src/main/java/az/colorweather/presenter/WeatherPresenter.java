@@ -2,10 +2,18 @@ package az.colorweather.presenter;
 
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import az.colorweather.WeatherContract;
 import az.colorweather.api.OpenWeatherAPI;
 import az.colorweather.api.model.current_day.CurrentWeather;
 import az.colorweather.api.model.five_day.ExtendedWeather;
+import az.colorweather.api.model.five_day.WeatherForecastElement;
 import az.colorweather.utils.OWSupportedLanguages;
 import az.colorweather.utils.OWSupportedUnits;
 import retrofit.Call;
@@ -22,6 +30,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     private static final String TAG = WeatherPresenter.class.getSimpleName();
     private WeatherContract.View view;
+    private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public WeatherPresenter(WeatherContract.View view) {
         this.view = view;
@@ -45,8 +54,13 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             @Override
             public void onResponse(Response<ExtendedWeather> response, Retrofit retrofit) {
                 ExtendedWeather extendedWeather = response.body();
-                Log.d(TAG, "Got Weather!: " + extendedWeather.getCity().getName());
-                view.updateFiveDayForecast(extendedWeather.getList());
+
+                for (WeatherForecastElement weather : extendedWeather.getList()) {
+                    Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
+                }
+
+                ArrayList<WeatherForecastElement> curatedList = filterMidDayWeatherForecasts(extendedWeather);
+                view.updateFiveDayForecast(curatedList);
             }
 
             @Override
@@ -54,6 +68,35 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                 Log.d(TAG, "Five Day Forecast request failed: " + t.getMessage());
             }
         });
+    }
+
+    private ArrayList<WeatherForecastElement> filterMidDayWeatherForecasts(ExtendedWeather extendedWeather) {
+
+        ArrayList<Integer> addedDays = new ArrayList();
+        ArrayList<WeatherForecastElement> curatedFiveDayforecast = new ArrayList();
+
+        for (int i = 0; i < extendedWeather.getList().size(); i++) {
+            Date parsedDate = new Date();
+            try {
+                parsedDate = weatherDateStampFormat.parse(extendedWeather.getList().get(i).getDtTxt());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(parsedDate);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (!addedDays.contains(currentDay)) {
+                addedDays.add(currentDay);
+                curatedFiveDayforecast.add(extendedWeather.getList().get(i));
+            }
+        }
+
+        //TODO: Filter Max and Min temperature of any given day and create ArrayList<FrecastDay>
+        //that contains the 5 day forecast with min and max values for each day.
+
+        return curatedFiveDayforecast;
     }
 
     @Override

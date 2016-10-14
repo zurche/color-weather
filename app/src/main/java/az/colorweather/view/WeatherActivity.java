@@ -1,18 +1,16 @@
 package az.colorweather.view;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
-import java.util.List;
-
+import az.colorweather.R;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.current_day.CurrentWeather;
 import az.colorweather.api.model.five_day.WeatherForecastElement;
-import az.colorweather.R;
 import az.colorweather.presenter.WeatherPresenter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,10 +41,26 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     @Override
-    public void updateFiveDayForecast(List<WeatherForecastElement> weatherForecastElement) {
-        for (WeatherForecastElement weather : weatherForecastElement) {
-            Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
-        }
+    public void updateFiveDayForecast(ArrayList<WeatherForecastElement> weatherForecastElement) {
+        String degrees = String.format(getString(R.string.degrees_placeholder),
+                weatherForecastElement.get(0).getMain().getTempMax().toString());
+        first_forecast.setText(degrees);
+
+        degrees = String.format(getString(R.string.degrees_placeholder),
+                weatherForecastElement.get(1).getMain().getTempMax().toString());
+        second_forecast.setText(degrees);
+
+        degrees = String.format(getString(R.string.degrees_placeholder),
+                weatherForecastElement.get(2).getMain().getTempMax().toString());
+        third_forecast.setText(degrees);
+
+        degrees = String.format(getString(R.string.degrees_placeholder),
+                weatherForecastElement.get(3).getMain().getTempMax().toString());
+        fourth_forecast.setText(degrees);
+
+        degrees = String.format(getString(R.string.degrees_placeholder),
+                weatherForecastElement.get(4).getMain().getTempMax().toString());
+        fifth_forecast.setText(degrees);
 
     }
 
@@ -54,7 +68,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     public void updateCurrentWeather(CurrentWeather currentWeather) {
         Log.d(TAG, currentWeather.getMain().getTemp() + "°");
         String degrees = String.format(getString(R.string.degrees_placeholder),
-                currentWeather.getMain().getTemp().toString());
+                currentWeather.getMain().getTempMax().toString());
         current_weather.setText(degrees);
     }
 }
