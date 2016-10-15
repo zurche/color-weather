@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:orientation="horizontal">
@@ -14,18 +14,19 @@
         android:gravity="center_vertical|center_horizontal|center">
 
         <TextView
-            android:id="@+id/first_forecast"
-            tools:text="56°"
+            android:id="@+id/first_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="56°" />
 
         <TextView
-            tools:text="LUN"
+            android:id="@+id/first_forecast_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/first_forecast"
-            android:textSize="20sp" />
+            android:layout_below="@id/first_forecast_max"
+            android:textSize="20sp"
+            tools:text="56°" />
 
     </RelativeLayout>
 
@@ -36,18 +37,19 @@
         android:gravity="center_vertical|center_horizontal|center">
 
         <TextView
-            android:id="@+id/second_forecast"
-            tools:text="56°"
+            android:id="@+id/second_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="56°" />
 
         <TextView
-            tools:text="LUN"
+            android:id="@+id/second_forecast_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/second_forecast"
-            android:textSize="20sp" />
+            android:layout_below="@id/second_forecast_max"
+            android:textSize="20sp"
+            tools:text="56°" />
 
     </RelativeLayout>
 
@@ -58,18 +60,19 @@
         android:gravity="center_vertical|center_horizontal|center">
 
         <TextView
-            android:id="@+id/third_forecast"
-            tools:text="56°"
+            android:id="@+id/third_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="56°" />
 
         <TextView
-            tools:text="LUN"
+            android:id="@+id/third_forecast_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/third_forecast"
-            android:textSize="20sp" />
+            android:layout_below="@id/third_forecast_max"
+            android:textSize="20sp"
+            tools:text="56°" />
 
     </RelativeLayout>
 
@@ -80,18 +83,19 @@
         android:gravity="center_vertical|center_horizontal|center">
 
         <TextView
-            android:id="@+id/fourth_forecast"
-            tools:text="56°"
+            android:id="@+id/fourth_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="56°" />
 
         <TextView
-            tools:text="LUN"
+            android:id="@+id/fourth_forecast_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fourth_forecast"
-            android:textSize="20sp" />
+            android:layout_below="@id/fourth_forecast_max"
+            android:textSize="20sp"
+            tools:text="56°" />
 
     </RelativeLayout>
 
@@ -102,18 +106,19 @@
         android:gravity="center_vertical|center_horizontal|center">
 
         <TextView
-            android:id="@+id/fifth_forecast"
-            tools:text="56°"
+            android:id="@+id/fifth_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="56°" />
 
         <TextView
-            tools:text="LUN"
+            android:id="@+id/fifth_forecast_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fifth_forecast"
-            android:textSize="20sp" />
+            android:layout_below="@id/fifth_forecast_max"
+            android:textSize="20sp"
+            tools:text="56°" />
 
     </RelativeLayout>
 

@@ -11,7 +11,7 @@ import az.colorweather.R;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
-import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
+import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,11 +20,17 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     private static final String TAG = WeatherActivity.class.getSimpleName();
 
-    @BindView(R.id.first_forecast)  TextView first_forecast;
-    @BindView(R.id.second_forecast) TextView second_forecast;
-    @BindView(R.id.third_forecast)  TextView third_forecast;
-    @BindView(R.id.fourth_forecast) TextView fourth_forecast;
-    @BindView(R.id.fifth_forecast)  TextView fifth_forecast;
+    @BindView(R.id.first_forecast_max)  TextView first_forecast_max;
+    @BindView(R.id.second_forecast_max) TextView second_forecast_max;
+    @BindView(R.id.third_forecast_max)  TextView third_forecast_max;
+    @BindView(R.id.fourth_forecast_max) TextView fourth_forecast_max;
+    @BindView(R.id.fifth_forecast_max)  TextView fifth_forecast_max;
+
+    @BindView(R.id.first_forecast_min)  TextView first_forecast_min;
+    @BindView(R.id.second_forecast_min) TextView second_forecast_min;
+    @BindView(R.id.third_forecast_min)  TextView third_forecast_min;
+    @BindView(R.id.fourth_forecast_min) TextView fourth_forecast_min;
+    @BindView(R.id.fifth_forecast_min)  TextView fifth_forecast_min;
 
     @BindView(R.id.current_weather) TextView current_weather;
 
@@ -46,26 +52,41 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     @Override
-    public void updateFiveDayForecast(ArrayList<WeatherForecastElement> weatherForecastElement) {
-        String degrees = String.format(getString(R.string.degrees_placeholder),
-                weatherForecastElement.get(0).getMain().getTempMax().toString());
-        first_forecast.setText(degrees);
+    public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
+        String maxDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(0).getMaxTempForecast().getMain().getTempMax().toString());
+        String minDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(0).getMinTempForecast().getMain().getTempMax().toString());
+        first_forecast_max.setText(maxDegrees);
+        first_forecast_min.setText(minDegrees);
 
-        degrees = String.format(getString(R.string.degrees_placeholder),
-                weatherForecastElement.get(1).getMain().getTempMax().toString());
-        second_forecast.setText(degrees);
+        maxDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(1).getMaxTempForecast().getMain().getTempMax().toString());
+        minDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(1).getMinTempForecast().getMain().getTempMax().toString());
+        second_forecast_max.setText(maxDegrees);
+        second_forecast_min.setText(minDegrees);
 
-        degrees = String.format(getString(R.string.degrees_placeholder),
-                weatherForecastElement.get(2).getMain().getTempMax().toString());
-        third_forecast.setText(degrees);
+        maxDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(2).getMaxTempForecast().getMain().getTempMax().toString());
+        minDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(2).getMinTempForecast().getMain().getTempMax().toString());
+        third_forecast_max.setText(maxDegrees);
+        third_forecast_min.setText(minDegrees);
 
-        degrees = String.format(getString(R.string.degrees_placeholder),
-                weatherForecastElement.get(3).getMain().getTempMax().toString());
-        fourth_forecast.setText(degrees);
+        maxDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(3).getMaxTempForecast().getMain().getTempMax().toString());
+        minDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(3).getMinTempForecast().getMain().getTempMax().toString());
+        fourth_forecast_max.setText(maxDegrees);
+        fourth_forecast_min.setText(minDegrees);
 
-        degrees = String.format(getString(R.string.degrees_placeholder),
-                weatherForecastElement.get(4).getMain().getTempMax().toString());
-        fifth_forecast.setText(degrees);
+        maxDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(4).getMaxTempForecast().getMain().getTempMax().toString());
+        minDegrees = String.format(getString(R.string.degrees_placeholder),
+                forecastDays.get(4).getMinTempForecast().getMain().getTempMax().toString());
+        fifth_forecast_max.setText(maxDegrees);
+        fifth_forecast_min.setText(minDegrees);
 
     }
 

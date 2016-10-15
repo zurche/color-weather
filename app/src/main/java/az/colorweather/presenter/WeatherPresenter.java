@@ -18,9 +18,7 @@ import az.colorweather.api.model.gson.five_day.ExtendedWeather;
 import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.api.utils.OWSupportedLanguages;
 import az.colorweather.api.utils.OWSupportedUnits;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import az.colorweather.model.ForecastDay;
 
 /**
  * Created by az on 13/10/16.
@@ -51,7 +49,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                     Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
                 }
 
-                ArrayList<WeatherForecastElement> curatedList = filterMidDayWeatherForecasts(extendedWeather);
+                ArrayList<ForecastDay> curatedList = filterTemps(extendedWeather);
                 view.updateFiveDayForecast(curatedList);
             }
 
@@ -79,34 +77,60 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         });
     }
 
-    private ArrayList<WeatherForecastElement> filterMidDayWeatherForecasts(ExtendedWeather extendedWeather) {
+    private ArrayList<ForecastDay> filterTemps(ExtendedWeather extendedWeather) {
+        ArrayList<ForecastDay> curatedFiveDayforecast = new ArrayList();
 
-        ArrayList<Integer> addedDays = new ArrayList();
-        ArrayList<WeatherForecastElement> curatedFiveDayforecast = new ArrayList();
+        WeatherForecastElement tmpMax = null;
+        WeatherForecastElement tmpMin = null;
+        Date parsedDate = null;
+        int tmpDay = 0;
 
-        for (int i = 0; i < extendedWeather.getList().size(); i++) {
-            Date parsedDate = new Date();
+        for (WeatherForecastElement element :
+                extendedWeather.getList()) {
+
+            parsedDate = new Date();
             try {
-                parsedDate = weatherDateStampFormat.parse(extendedWeather.getList().get(i).getDtTxt());
+                parsedDate = weatherDateStampFormat.parse(element.getDtTxt());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-            if (!addedDays.contains(currentDay)) {
-                addedDays.add(currentDay);
-                curatedFiveDayforecast.add(extendedWeather.getList().get(i));
+            //If current day is bigger than tmpDay it means we are checking a new day, add new
+            //forecast day with current max and min values here
+            if (currentDay > tmpDay) {
+                if (tmpDay != 0) {
+                    curatedFiveDayforecast.add(new ForecastDay(tmpMax, tmpMin, parsedDate));
+                }
+                tmpDay = currentDay;
+                tmpMax = null;
+                tmpMin = null;
             }
+
+            if (null == tmpMax) {
+                tmpMax = element;
+            }
+
+            if (null == tmpMin) {
+                tmpMin = element;
+            }
+
+            if (element.getMain().getTempMax() > tmpMax.getMain().getTempMax()) {
+                tmpMax = element;
+            }
+
+            if (element.getMain().getTempMax() < tmpMin.getMain().getTempMin()) {
+                tmpMin = element;
+            }
+
         }
 
-        //TODO: Filter Max and Min temperature of any given day and create ArrayList<FrecastDay>
-        //that contains the 5 day forecast with min and max values for each day.
+        //This case is for the last day scenario
+        curatedFiveDayforecast.add(new ForecastDay(tmpMax, tmpMin, parsedDate));
 
         return curatedFiveDayforecast;
     }
-
 
 }
