@@ -10,6 +10,8 @@ import java.util.Date;
 
 import az.colorweather.WeatherContract;
 import az.colorweather.api.OWService;
+import az.colorweather.api.listener.OWRequestListener;
+import az.colorweather.api.model.OWResponse;
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
 import az.colorweather.api.model.gson.five_day.ExtendedWeather;
@@ -40,9 +42,9 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     @Override
     public void getFiveDayForecast(final Coord coordinate) {
-        mOWService.getFiveDayForecast(coordinate, new Callback<ExtendedWeather>() {
+        mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
             @Override
-            public void onResponse(Response<ExtendedWeather> response, Retrofit retrofit) {
+            public void onResponse(OWResponse<ExtendedWeather> response) {
                 ExtendedWeather extendedWeather = response.body();
 
                 for (WeatherForecastElement weather : extendedWeather.getList()) {
@@ -62,9 +64,9 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     @Override
     public void getCurrentDayForecast(final Coord coordinate) {
-        mOWService.getCurrentDayForecast(coordinate, new Callback<CurrentWeather>() {
+        mOWService.getCurrentDayForecast(coordinate, new OWRequestListener<CurrentWeather>() {
             @Override
-            public void onResponse(Response<CurrentWeather> response, Retrofit retrofit) {
+            public void onResponse(OWResponse<CurrentWeather> response) {
                 CurrentWeather currentWeather = response.body();
                 Log.d(TAG, "Got Current Weather!: " + currentWeather.getWeather().get(0).getDescription());
                 view.updateCurrentWeather(currentWeather);
