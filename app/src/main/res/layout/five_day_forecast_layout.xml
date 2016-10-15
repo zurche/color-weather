@@ -17,6 +17,7 @@
             android:id="@+id/first_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/first_forecast_max"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -40,6 +42,7 @@
             android:id="@+id/second_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -48,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/second_forecast_max"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -63,6 +67,7 @@
             android:id="@+id/third_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -71,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/third_forecast_max"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -86,6 +92,7 @@
             android:id="@+id/fourth_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -94,6 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/fourth_forecast_max"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -109,6 +117,7 @@
             android:id="@+id/fifth_forecast_max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             tools:text="56°" />
 
@@ -117,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/fifth_forecast_max"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="56°" />
 
