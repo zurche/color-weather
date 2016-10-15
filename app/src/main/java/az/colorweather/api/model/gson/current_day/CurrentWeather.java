@@ -1,15 +1,15 @@
 
-package az.colorweather.api.model.current_day;
+package az.colorweather.api.model.gson.current_day;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import az.colorweather.api.model.common.Clouds;
-import az.colorweather.api.model.common.Coord;
-import az.colorweather.api.model.common.Rain;
-import az.colorweather.api.model.common.Wind;
+import az.colorweather.api.model.gson.common.Clouds;
+import az.colorweather.api.model.gson.common.Coord;
+import az.colorweather.api.model.gson.common.Rain;
+import az.colorweather.api.model.gson.common.Wind;
 
 public class CurrentWeather {
 

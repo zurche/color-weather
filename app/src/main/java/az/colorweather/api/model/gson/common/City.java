@@ -1,10 +1,10 @@
 
-package az.colorweather.api.model.common;
+package az.colorweather.api.model.gson.common;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import az.colorweather.api.model.five_day.Sys;
+import az.colorweather.api.model.gson.five_day.Sys;
 
 public class City {
 

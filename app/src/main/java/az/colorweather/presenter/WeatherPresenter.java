@@ -7,18 +7,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import az.colorweather.WeatherContract;
-import az.colorweather.api.OpenWeatherAPI;
-import az.colorweather.api.model.current_day.CurrentWeather;
-import az.colorweather.api.model.five_day.ExtendedWeather;
-import az.colorweather.api.model.five_day.WeatherForecastElement;
-import az.colorweather.utils.OWSupportedLanguages;
-import az.colorweather.utils.OWSupportedUnits;
-import retrofit.Call;
+import az.colorweather.api.OWService;
+import az.colorweather.api.model.gson.common.Coord;
+import az.colorweather.api.model.gson.current_day.CurrentWeather;
+import az.colorweather.api.model.gson.five_day.ExtendedWeather;
+import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
+import az.colorweather.api.utils.OWSupportedLanguages;
+import az.colorweather.api.utils.OWSupportedUnits;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
@@ -31,26 +29,18 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     private static final String TAG = WeatherPresenter.class.getSimpleName();
     private WeatherContract.View view;
     private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private OWService mOWService;
 
     public WeatherPresenter(WeatherContract.View view) {
         this.view = view;
+        mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
+        mOWService.setLanguage(OWSupportedLanguages.ENGLISH);
+        mOWService.setMetricUnits(OWSupportedUnits.METRIC);
     }
 
     @Override
-    public void getFiveDayForecast() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        OpenWeatherAPI openWeatherAPI = retrofit.create(OpenWeatherAPI.class);
-        Call<ExtendedWeather> call = openWeatherAPI.getFiveDayExtendedWeather(
-                -31.416,
-                -64.186,
-                "b97081fb50c5b5c19841ec6ae4f5daec",
-                OWSupportedUnits.METRIC.getUnit(),
-                OWSupportedLanguages.SPANISH.getLanguageLocale());
-        call.enqueue(new Callback<ExtendedWeather>() {
+    public void getFiveDayForecast(final Coord coordinate) {
+        mOWService.getFiveDayForecast(coordinate, new Callback<ExtendedWeather>() {
             @Override
             public void onResponse(Response<ExtendedWeather> response, Retrofit retrofit) {
                 ExtendedWeather extendedWeather = response.body();
@@ -66,6 +56,23 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             @Override
             public void onFailure(Throwable t) {
                 Log.d(TAG, "Five Day Forecast request failed: " + t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getCurrentDayForecast(final Coord coordinate) {
+        mOWService.getCurrentDayForecast(coordinate, new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Response<CurrentWeather> response, Retrofit retrofit) {
+                CurrentWeather currentWeather = response.body();
+                Log.d(TAG, "Got Current Weather!: " + currentWeather.getWeather().get(0).getDescription());
+                view.updateCurrentWeather(currentWeather);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d(TAG, "Current Weather request failed: " + t.getMessage());
             }
         });
     }
@@ -99,32 +106,5 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         return curatedFiveDayforecast;
     }
 
-    @Override
-    public void getCurrentDayForecast() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        OpenWeatherAPI openWeatherAPI = retrofit.create(OpenWeatherAPI.class);
-        Call<CurrentWeather> call = openWeatherAPI.getCurrentWeather(
-                -31.416,
-                -64.186,
-                "b97081fb50c5b5c19841ec6ae4f5daec",
-                OWSupportedUnits.METRIC.getUnit(),
-                OWSupportedLanguages.SPANISH.getLanguageLocale());
-        call.enqueue(new Callback<CurrentWeather>() {
-            @Override
-            public void onResponse(Response<CurrentWeather> response, Retrofit retrofit) {
-                CurrentWeather currentWeather = response.body();
-                Log.d(TAG, "Got Current Weather!: " + currentWeather.getWeather().get(0).getDescription());
-                view.updateCurrentWeather(currentWeather);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Current Weather request failed: " + t.getMessage());
-            }
-        });
-    }
 }

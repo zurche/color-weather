@@ -1,4 +1,4 @@
-package az.colorweather.utils;
+package az.colorweather.api.utils;
 
 /**
  * Created by az on 13/10/16.

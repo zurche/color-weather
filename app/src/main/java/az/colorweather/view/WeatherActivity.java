@@ -9,8 +9,9 @@ import java.util.ArrayList;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
-import az.colorweather.api.model.current_day.CurrentWeather;
-import az.colorweather.api.model.five_day.WeatherForecastElement;
+import az.colorweather.api.model.gson.common.Coord;
+import az.colorweather.api.model.gson.current_day.CurrentWeather;
+import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.presenter.WeatherPresenter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +37,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         WeatherPresenter presenter = new WeatherPresenter(this);
 
-        presenter.getFiveDayForecast();
-        presenter.getCurrentDayForecast();
+        Coord coordinate = new Coord();
+        coordinate.setLat(-31.4245212);
+        coordinate.setLon(-64.1884352);
+
+        presenter.getFiveDayForecast(coordinate);
+        presenter.getCurrentDayForecast(coordinate);
     }
 
     @Override
