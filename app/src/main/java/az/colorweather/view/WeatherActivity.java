@@ -47,8 +47,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         presenter = new WeatherPresenter(this);
 
         Coord coordinate = new Coord();
-        coordinate.setLat(-31.4245212);
-        coordinate.setLon(-64.1884352);
+        coordinate.setLat(32.8998091);
+        coordinate.setLon(-97.0425239);
 
         presenter.getFiveDayForecast(coordinate);
         presenter.getCurrentDayForecast(coordinate);

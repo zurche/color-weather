@@ -36,7 +36,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
         mOWService.setLanguage(OWSupportedLanguages.ENGLISH);
-        mOWService.setMetricUnits(OWSupportedUnits.METRIC);
+        mOWService.setMetricUnits(OWSupportedUnits.FAHRENHEIT);
     }
 
     @Override
