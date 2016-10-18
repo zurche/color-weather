@@ -1,45 +1,30 @@
 package az.colorweather.model;
 
-import java.util.Date;
-
-import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
-
 /**
  * Created by az on 14/10/16.
  */
 
 public class ForecastDay {
-    private WeatherForecastElement maxTempForecast;
-    private WeatherForecastElement minTempForecast;
-    private Date day;
 
-    public ForecastDay(WeatherForecastElement maxTempForecast, WeatherForecastElement minTempForecast, Date day) {
-        this.maxTempForecast = maxTempForecast;
-        this.minTempForecast = minTempForecast;
+    String day;
+    String dayString;
+    int temperature;
+
+    public ForecastDay(String day, String dayString, int temperature) {
         this.day = day;
+        this.dayString = dayString;
+        this.temperature = temperature;
     }
 
-    public WeatherForecastElement getMaxTempForecast() {
-        return maxTempForecast;
-    }
-
-    public void setMaxTempForecast(WeatherForecastElement maxTempForecast) {
-        this.maxTempForecast = maxTempForecast;
-    }
-
-    public WeatherForecastElement getMinTempForecast() {
-        return minTempForecast;
-    }
-
-    public void setMinTempForecast(WeatherForecastElement minTempForecast) {
-        this.minTempForecast = minTempForecast;
-    }
-
-    public Date getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Date day) {
-        this.day = day;
+    public String getDayMonth() {
+        return dayString;
+    }
+
+    public int getTemperature() {
+        return temperature;
     }
 }

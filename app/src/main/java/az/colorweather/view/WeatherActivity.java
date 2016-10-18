@@ -7,15 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
-import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;
@@ -26,6 +23,7 @@ import butterknife.OnClick;
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
 
     private static final String TAG = WeatherActivity.class.getSimpleName();
+    public static final int FIRST_DAY_INDEX = 0;
     public static final int SECOND_DAY_INDEX = 1;
     public static final int THIRD_DAY_INDEX = 2;
     public static final int FOURTH_DAY_INDEX = 3;
@@ -36,10 +34,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     private Typeface robotoRegularTypeFace;
 
     private Typeface robotoBlackTypeFace;
-
-    private SimpleDateFormat dayFormat;
-
-    private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @BindView(R.id.first_forecast)  TextView first_forecast;
     @BindView(R.id.second_forecast) TextView second_forecast;
@@ -52,6 +46,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @BindView(R.id.third_forecast_day)  TextView third_forecast_day;
     @BindView(R.id.fourth_forecast_day) TextView fourth_forecast_day;
     @BindView(R.id.fifth_forecast_day)  TextView fifth_forecast_day;
+
+    @BindView(R.id.first_forecast_day_month)  TextView first_forecast_day_month;
+    @BindView(R.id.second_forecast_day_month) TextView second_forecast_day_month;
+    @BindView(R.id.third_forecast_day_month)  TextView third_forecast_day_month;
+    @BindView(R.id.fourth_forecast_day_month) TextView fourth_forecast_day_month;
+    @BindView(R.id.fifth_forecast_day_month)  TextView fifth_forecast_day_month;
 
     @BindView(R.id.current_weather) TextView current_weather;
 
@@ -67,17 +67,11 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-
         ButterKnife.bind(this);
-
-        presenter = new WeatherPresenter(this);
-
+        presenter = new WeatherPresenter(this, getResources().getConfiguration().locale);
         robotoRegularTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Regular.ttf");
         robotoBlackTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Black.ttf");
-
         setupUiTypeFace();
-
-        dayFormat = new SimpleDateFormat("EEE", getResources().getConfiguration().locale);
     }
 
     @Override
@@ -108,6 +102,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         today_button.setTypeface(robotoBlackTypeFace);
         five_day_button.setTypeface(robotoRegularTypeFace);
+
+        first_forecast_day_month.setVisibility(View.GONE);
+        second_forecast_day_month.setVisibility(View.GONE);
+        third_forecast_day_month.setVisibility(View.GONE);
+        fourth_forecast_day_month.setVisibility(View.GONE);
+        fifth_forecast_day_month.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.five_day_button)
@@ -128,6 +128,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         today_button.setTypeface(robotoRegularTypeFace);
         five_day_button.setTypeface(robotoBlackTypeFace);
+
+        first_forecast_day_month.setVisibility(View.VISIBLE);
+        second_forecast_day_month.setVisibility(View.VISIBLE);
+        third_forecast_day_month.setVisibility(View.VISIBLE);
+        fourth_forecast_day_month.setVisibility(View.VISIBLE);
+        fifth_forecast_day_month.setVisibility(View.VISIBLE);
     }
 
     private void setupUiTypeFace() {
@@ -149,46 +155,32 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
-    public void updateFiveDayForecast(ArrayList<WeatherForecastElement> forecastDays) {
-        int roundedTemp = (int) Math.round(forecastDays.get(SECOND_DAY_INDEX).getMain().getTemp());
-        String maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
-        second_forecast.setText(maxDegrees);
-        second_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
-        try {
-            second_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(SECOND_DAY_INDEX).getDtTxt())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
+        first_forecast_day_month.setText(forecastDays.get(FIRST_DAY_INDEX).getDayMonth());
 
-        roundedTemp = (int) Math.round(forecastDays.get(THIRD_DAY_INDEX).getMain().getTemp());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
-        third_forecast.setText(maxDegrees);
-        third_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
-        try {
-            third_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(THIRD_DAY_INDEX).getDtTxt())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(SECOND_DAY_INDEX).getTemperature());
+        second_forecast.setText(tempWithDegrees);
+        second_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(SECOND_DAY_INDEX).getTemperature())));
+        second_forecast_day.setText(forecastDays.get(SECOND_DAY_INDEX).getDay());
+        second_forecast_day_month.setText(forecastDays.get(SECOND_DAY_INDEX).getDayMonth());
 
-        roundedTemp = (int) Math.round(forecastDays.get(FOURTH_DAY_INDEX).getMain().getTemp());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
-        fourth_forecast.setText(maxDegrees);
-        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
-        try {
-            fourth_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(FOURTH_DAY_INDEX).getDtTxt())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(THIRD_DAY_INDEX).getTemperature());
+        third_forecast.setText(tempWithDegrees);
+        third_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(THIRD_DAY_INDEX).getTemperature())));
+        third_forecast_day.setText(forecastDays.get(THIRD_DAY_INDEX).getDay());
+        third_forecast_day_month.setText(forecastDays.get(THIRD_DAY_INDEX).getDayMonth());
 
-        roundedTemp = (int) Math.round(forecastDays.get(FIFTH_DAY_INDEX).getMain().getTemp());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
-        fifth_forecast.setText(maxDegrees);
-        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
-        try {
-            fifth_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(FIFTH_DAY_INDEX).getDtTxt())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FOURTH_DAY_INDEX).getTemperature());
+        fourth_forecast.setText(tempWithDegrees);
+        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FOURTH_DAY_INDEX).getTemperature())));
+        fourth_forecast_day.setText(forecastDays.get(FOURTH_DAY_INDEX).getDay());
+        fourth_forecast_day_month.setText(forecastDays.get(FOURTH_DAY_INDEX).getDayMonth());
+
+        tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FIFTH_DAY_INDEX).getTemperature());
+        fifth_forecast.setText(tempWithDegrees);
+        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIFTH_DAY_INDEX).getTemperature())));
+        fifth_forecast_day.setText(forecastDays.get(FIFTH_DAY_INDEX).getDay());
+        fifth_forecast_day_month.setText(forecastDays.get(FIFTH_DAY_INDEX).getDayMonth());
     }
 
     @Override

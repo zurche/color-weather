@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-import az.colorweather.util.Temperature;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.OWService;
 import az.colorweather.api.listener.OWRequestListener;
@@ -20,6 +20,7 @@ import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.api.utils.OWSupportedLanguages;
 import az.colorweather.api.utils.OWSupportedUnits;
 import az.colorweather.model.ForecastDay;
+import az.colorweather.util.Temperature;
 
 /**
  * Created by az on 13/10/16.
@@ -31,12 +32,16 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     private WeatherContract.View view;
     private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private OWService mOWService;
+    private Locale mLocale;
+    private SimpleDateFormat dayFormat;
 
-    public WeatherPresenter(WeatherContract.View view) {
+    public WeatherPresenter(WeatherContract.View view, Locale locale) {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
         mOWService.setLanguage(OWSupportedLanguages.SPANISH);
         mOWService.setMetricUnits(OWSupportedUnits.METRIC);
+        mLocale = locale;
+        dayFormat = new SimpleDateFormat("EEE", mLocale);
     }
 
     @Override
@@ -50,7 +55,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                     Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
                 }
 
-                ArrayList<WeatherForecastElement> curatedList = filterTemps(extendedWeather);
+                ArrayList<ForecastDay> curatedList = filterTemps(extendedWeather);
                 view.updateFiveDayForecast(curatedList);
             }
 
@@ -113,8 +118,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         return tempColor;
     }
 
-    private ArrayList<WeatherForecastElement> filterTemps(ExtendedWeather extendedWeather) {
-        ArrayList<WeatherForecastElement> curatedFiveDayforecast = new ArrayList();
+    private ArrayList<ForecastDay> filterTemps(ExtendedWeather extendedWeather) {
+        ArrayList<ForecastDay> curatedFiveDayForecast = new ArrayList();
 
         int tmpDay = 0;
 
@@ -130,14 +135,17 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int currentMonth = calendar.get(Calendar.MONTH);
 
             if (currentDay != tmpDay) {
-                curatedFiveDayforecast.add(element);
+                int roundedTemp = (int) Math.round(element.getMain().getTemp());
+                String dayName = dayFormat.format(parsedDate);
+                curatedFiveDayForecast.add(new ForecastDay(dayName, "" + currentDay + "/" + currentMonth, roundedTemp));
                 tmpDay = currentDay;
             }
         }
 
-        return curatedFiveDayforecast;
+        return curatedFiveDayForecast;
     }
 
 }

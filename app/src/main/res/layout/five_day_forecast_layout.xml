@@ -27,7 +27,12 @@
         <TextView
             android:id="@+id/first_forecast_day"
             style="@style/SelectedForecastElementDay"
-            tools:text="MON"/>
+            tools:text="NOW"/>
+
+        <TextView
+            android:id="@+id/first_forecast_day_month"
+            style="@style/ForecastElementDay"
+            tools:text="NOW"/>
 
     </LinearLayout>
 
@@ -53,6 +58,11 @@
             style="@style/ForecastElementDay"
             tools:text="MON"/>
 
+        <TextView
+            android:id="@+id/second_forecast_day_month"
+            style="@style/ForecastElementDay"
+            tools:text="NOW"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -76,6 +86,11 @@
             android:id="@+id/third_forecast_day"
             style="@style/ForecastElementDay"
             tools:text="MON"/>
+
+        <TextView
+            android:id="@+id/third_forecast_day_month"
+            style="@style/ForecastElementDay"
+            tools:text="NOW"/>
 
     </LinearLayout>
 
@@ -101,6 +116,11 @@
             style="@style/ForecastElementDay"
             tools:text="MON"/>
 
+        <TextView
+            android:id="@+id/fourth_forecast_day_month"
+            style="@style/ForecastElementDay"
+            tools:text="NOW"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -124,6 +144,11 @@
             android:id="@+id/fifth_forecast_day"
             style="@style/ForecastElementDay"
             tools:text="MON"/>
+
+        <TextView
+            android:id="@+id/fifth_forecast_day_month"
+            style="@style/ForecastElementDay"
+            tools:text="NOW"/>
 
     </LinearLayout>
 
