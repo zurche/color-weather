@@ -7,130 +7,100 @@
     android:layout_centerHorizontal="true"
     android:orientation="horizontal">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal|center">
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/first_forecast_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            style="@style/ForecastElement"
             tools:text="56°" />
 
         <TextView
             android:id="@+id/first_forecast_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/first_forecast_max"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="56°" />
+            style="@style/ForecastElement"
+            tools:text="9°" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal|center">
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/second_forecast_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            style="@style/ForecastElement"
             tools:text="56°" />
 
         <TextView
             android:id="@+id/second_forecast_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/second_forecast_max"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="56°" />
+            style="@style/ForecastElement"
+            tools:text="9°" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal|center">
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/third_forecast_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            style="@style/ForecastElement"
             tools:text="56°" />
 
         <TextView
             android:id="@+id/third_forecast_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/third_forecast_max"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="56°" />
+            style="@style/ForecastElement"
+            tools:text="9°" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal|center">
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/fourth_forecast_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            style="@style/ForecastElement"
             tools:text="56°" />
 
         <TextView
             android:id="@+id/fourth_forecast_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fourth_forecast_max"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="56°" />
+            style="@style/ForecastElement"
+            tools:text="9°" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|center_horizontal|center">
+        android:gravity="center_vertical|center_horizontal|center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/fifth_forecast_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            style="@style/ForecastElement"
             tools:text="56°" />
 
         <TextView
             android:id="@+id/fifth_forecast_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fifth_forecast_max"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="56°" />
+            style="@style/ForecastElement"
+            tools:text="9°" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </LinearLayout>
