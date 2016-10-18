@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/first_forecast_day_month"
-            style="@style/ForecastElementDay"
+            style="@style/SelectedForecastElementDay"
             tools:text="NOW"/>
 
     </LinearLayout>

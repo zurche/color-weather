@@ -25,14 +25,4 @@
 
     <include layout="@layout/day_selection_layout" />
 
-    <TextView
-        android:id="@+id/degrees_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="170sp"
-        android:text="@string/degrees_icon"
-        android:layout_alignBaseline="@+id/current_weather"
-        android:layout_alignBottom="@+id/current_weather"
-        android:layout_toEndOf="@+id/current_weather" />
-
 </RelativeLayout>

@@ -58,8 +58,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @BindView(R.id.today_button)    TextView today_button;
     @BindView(R.id.five_day_button) TextView five_day_button;
 
-    @BindView(R.id.degrees_icon) TextView degrees_icon;
-
     @BindView(R.id.today_underline)    TextView today_underline;
     @BindView(R.id.five_day_underline) TextView five_day_underline;
 
@@ -138,10 +136,10 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     private void setupUiTypeFace() {
         first_forecast_day.setTypeface(robotoBlackTypeFace);
-        second_forecast_day.setTypeface(robotoRegularTypeFace);
-        third_forecast_day.setTypeface(robotoRegularTypeFace);
-        fourth_forecast_day.setTypeface(robotoRegularTypeFace);
-        fifth_forecast_day.setTypeface(robotoRegularTypeFace);
+        second_forecast_day.setTypeface(robotoBlackTypeFace);
+        third_forecast_day.setTypeface(robotoBlackTypeFace);
+        fourth_forecast_day.setTypeface(robotoBlackTypeFace);
+        fifth_forecast_day.setTypeface(robotoBlackTypeFace);
 
         current_weather.setTypeface(robotoBlackTypeFace);
         first_forecast.setTypeface(robotoBlackTypeFace);
@@ -149,8 +147,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         third_forecast.setTypeface(robotoBlackTypeFace);
         fourth_forecast.setTypeface(robotoBlackTypeFace);
         fifth_forecast.setTypeface(robotoBlackTypeFace);
-
-        degrees_icon.setTypeface(robotoBlackTypeFace);
     }
 
     //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
@@ -186,10 +182,9 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     public void updateCurrentWeather(CurrentWeather currentWeather) {
         int roundedTemp = (int) Math.round(currentWeather.getMain().getTemp());
-        String degrees = "" + roundedTemp;
+        String degrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         current_weather.setText(degrees);
         current_weather.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
-        degrees_icon.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
 
         first_forecast.setText(degrees);
         first_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));

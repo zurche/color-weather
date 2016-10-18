@@ -15,4 +15,7 @@
     <color name="underline_text_color">#0082ceea</color>
     <color name="underline_background_color">#7ff1dd4b</color>
 
+    <color name="currentDayForecastTextColor">#000000</color>
+    <color name="otherDayForecastTextColor">#8b8687</color>
+
 </resources>

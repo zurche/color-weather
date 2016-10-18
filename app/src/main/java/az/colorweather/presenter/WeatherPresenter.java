@@ -39,7 +39,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
         mOWService.setLanguage(OWSupportedLanguages.SPANISH);
-        mOWService.setMetricUnits(OWSupportedUnits.METRIC);
+        mOWService.setMetricUnits(OWSupportedUnits.FAHRENHEIT);
         mLocale = locale;
         dayFormat = new SimpleDateFormat("EEE", mLocale);
     }
