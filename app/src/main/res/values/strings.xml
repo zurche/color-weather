@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">ColorWeather</string>
-    <string name="degrees_placeholder">%1$s°</string>
+    <string name="degrees_placeholder">%d°</string>
 </resources>

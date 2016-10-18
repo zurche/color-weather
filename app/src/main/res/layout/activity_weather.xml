@@ -17,7 +17,7 @@
         tools:text="58°"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textSize="30sp" />
+        android:textSize="150sp" />
 
     <include layout="@layout/five_day_forecast_layout"/>
 

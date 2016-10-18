@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#00959edc</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Weather Color Palette -->
+    <color name="super_hot">#ff3241</color>  <!-- <<28           |      <<84 -->
+    <color name="medium_hot">#ff9c2d</color> <!-- >>26 & <<28    |      >>80 & <<84 -->
+    <color name="hot">#ffcf31</color>        <!-- >>23 & <<26    |      >>74 & <<79 -->
+    <color name="ok">#48e2c0</color>         <!-- >>21 & <<23    |      >>70 & <<74 -->
+    <color name="ok_chill">#49e2db</color>   <!-- >>21 & <<15    |      >>60 & <<70 -->
+    <color name="cold">#82ceea</color>       <!-- >>15           |      <<60 -->
 </resources>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import az.colorweather.util.Temperature;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.OWService;
 import az.colorweather.api.listener.OWRequestListener;
@@ -75,6 +76,41 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                 Log.d(TAG, "Current Weather request failed: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public Temperature getColorForTemp(int temp) {
+        Temperature tempColor = Temperature.OK;
+        if(mOWService.getSelectedMetricSystem() == OWSupportedUnits.METRIC){
+            if(temp > 28){
+                tempColor = Temperature.SUPER_HOT;
+            } else if (temp > 26 & temp < 28) {
+                tempColor = Temperature.MEDIUM_HOT;
+            } else if (temp > 23 & temp < 26) {
+                tempColor = Temperature.HOT;
+            } else if (temp > 21 & temp < 23) {
+                tempColor = Temperature.OK;
+            } else if (temp > 15 & temp < 21) {
+                tempColor = Temperature.OK_CHILL;
+            } else if (temp < 15) {
+                tempColor = Temperature.COLD;
+            }
+        } else if (mOWService.getSelectedMetricSystem() == OWSupportedUnits.FAHRENHEIT){
+            if(temp > 84){
+                tempColor = Temperature.SUPER_HOT;
+            } else if (temp > 80 & temp < 84) {
+                tempColor = Temperature.MEDIUM_HOT;
+            } else if (temp > 74 & temp < 79) {
+                tempColor = Temperature.HOT;
+            } else if (temp > 70 & temp < 74) {
+                tempColor = Temperature.OK;
+            } else if (temp > 60 & temp < 70) {
+                tempColor = Temperature.OK_CHILL;
+            } else if (temp < 60) {
+                tempColor = Temperature.COLD;
+            }
+        }
+        return tempColor;
     }
 
     private ArrayList<ForecastDay> filterTemps(ExtendedWeather extendedWeather) {

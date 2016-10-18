@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
-import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.model.ForecastDay;
+import az.colorweather.util.Temperature;
 
 /**
  * Created by az on 13/10/16.
@@ -23,5 +23,7 @@ public interface WeatherContract {
         void getFiveDayForecast(final Coord coordinate);
 
         void getCurrentDayForecast(final Coord coordinate);
+
+        Temperature getColorForTemp(int temp);
     }
 }

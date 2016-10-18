@@ -112,4 +112,12 @@ public class OWService {
         });
     }
 
+    /**
+     * Method used to check current selected metric system of the service.
+     * @return OWSupportedUnits selected Units System.
+     */
+    public OWSupportedUnits getSelectedMetricSystem() {
+        return this.mSelectedUnits;
+    }
+
 }
