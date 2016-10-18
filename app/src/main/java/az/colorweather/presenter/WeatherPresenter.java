@@ -14,7 +14,6 @@ import az.colorweather.api.OWService;
 import az.colorweather.api.listener.OWRequestListener;
 import az.colorweather.api.model.OWResponse;
 import az.colorweather.api.model.gson.common.Coord;
-import az.colorweather.api.model.gson.current_day.CurrentWeather;
 import az.colorweather.api.model.gson.five_day.ExtendedWeather;
 import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.api.utils.OWSupportedLanguages;
@@ -29,11 +28,15 @@ import az.colorweather.util.Temperature;
 public class WeatherPresenter implements WeatherContract.Presenter {
 
     private static final String TAG = WeatherPresenter.class.getSimpleName();
+    public static final int TEN_MINUTES = 600000;
     private WeatherContract.View view;
     private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private OWService mOWService;
     private Locale mLocale;
     private SimpleDateFormat dayFormat;
+    private ArrayList<ForecastDay> mFiveDayForecast;
+    private ArrayList<ForecastDay> mDayForecast;
+    private Date mLastRetrievedDateStamp;
 
     public WeatherPresenter(WeatherContract.View view, Locale locale) {
         this.view = view;
@@ -46,41 +49,43 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     @Override
     public void getFiveDayForecast(final Coord coordinate) {
-        mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
-            @Override
-            public void onResponse(OWResponse<ExtendedWeather> response) {
-                ExtendedWeather extendedWeather = response.body();
 
-                for (WeatherForecastElement weather : extendedWeather.getList()) {
-                    Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
+        if(canUpdateForecast()) {
+            mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
+                @Override
+                public void onResponse(OWResponse<ExtendedWeather> response) {
+                    ExtendedWeather extendedWeather = response.body();
+                    mFiveDayForecast = filterTemps(extendedWeather);
+                    mDayForecast = filterUpcomingFiveForecasts(extendedWeather);
+                    view.updateFiveDayForecast(mFiveDayForecast);
+                    mLastRetrievedDateStamp = new Date(System.currentTimeMillis());
                 }
 
-                ArrayList<ForecastDay> curatedList = filterTemps(extendedWeather);
-                view.updateFiveDayForecast(curatedList);
-            }
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "Five Day Forecast request failed: " + t.getMessage());
+                }
+            });
+        } else {
+            view.updateFiveDayForecast(mFiveDayForecast);
+        }
+    }
 
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Five Day Forecast request failed: " + t.getMessage());
+    private boolean canUpdateForecast() {
+        if(mLastRetrievedDateStamp != null && mFiveDayForecast != null) {
+            if(System.currentTimeMillis() - mLastRetrievedDateStamp.getTime() > TEN_MINUTES) {
+                return true;
+            } else {
+                return false;
             }
-        });
+        } else {
+            return true;
+        }
     }
 
     @Override
     public void getCurrentDayForecast(final Coord coordinate) {
-        mOWService.getCurrentDayForecast(coordinate, new OWRequestListener<CurrentWeather>() {
-            @Override
-            public void onResponse(OWResponse<CurrentWeather> response) {
-                CurrentWeather currentWeather = response.body();
-                Log.d(TAG, "Got Current Weather!: " + currentWeather.getWeather().get(0).getDescription());
-                view.updateCurrentWeather(currentWeather);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.d(TAG, "Current Weather request failed: " + t.getMessage());
-            }
-        });
+        view.updateCurrentDayWeather(mDayForecast);
     }
 
     @Override
@@ -136,16 +141,59 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
             int currentMonth = calendar.get(Calendar.MONTH);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 
             if (currentDay != tmpDay) {
                 int roundedTemp = (int) Math.round(element.getMain().getTemp());
                 String dayName = dayFormat.format(parsedDate);
-                curatedFiveDayForecast.add(new ForecastDay(dayName, "" + currentDay + "/" + currentMonth, roundedTemp));
+                curatedFiveDayForecast.add(
+                        new ForecastDay(
+                                dayName,
+                                "" + currentDay + "/" + currentMonth,
+                                currentHour,
+                                roundedTemp));
                 tmpDay = currentDay;
             }
         }
 
         return curatedFiveDayForecast;
+    }
+
+    private ArrayList<ForecastDay> filterUpcomingFiveForecasts(ExtendedWeather extendedWeather) {
+        ArrayList<ForecastDay> upcomingFiveForecasts = new ArrayList();
+
+        int currentDayCount = 0;
+
+        for (WeatherForecastElement element : extendedWeather.getList()) {
+
+            Date parsedDate = new Date();
+            try {
+                parsedDate = weatherDateStampFormat.parse(element.getDtTxt());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(parsedDate);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+            int roundedTemp = (int) Math.round(element.getMain().getTemp());
+            String dayName = dayFormat.format(parsedDate);
+            upcomingFiveForecasts.add(
+                    new ForecastDay(dayName,
+                            "" + currentDay + "/" + currentMonth,
+                            currentHour,
+                            roundedTemp));
+
+            currentDayCount++;
+
+            if(currentDayCount == 5) {
+                break;
+            }
+        }
+
+        return upcomingFiveForecasts;
     }
 
 }

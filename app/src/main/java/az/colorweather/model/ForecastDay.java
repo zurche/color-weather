@@ -8,12 +8,14 @@ public class ForecastDay {
 
     String day;
     String dayString;
+    String hourOfForecast;
     int temperature;
 
-    public ForecastDay(String day, String dayString, int temperature) {
+    public ForecastDay(String day, String dayString, int hourOfForecast, int temperature) {
         this.day = day;
         this.dayString = dayString;
         this.temperature = temperature;
+        this.hourOfForecast = hourOfForecast + ":00";
     }
 
     public String getDay() {
@@ -26,5 +28,9 @@ public class ForecastDay {
 
     public int getTemperature() {
         return temperature;
+    }
+
+    public String getHourOfForecast() {
+        return hourOfForecast;
     }
 }

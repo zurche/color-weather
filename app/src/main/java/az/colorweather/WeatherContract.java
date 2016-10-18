@@ -3,7 +3,6 @@ package az.colorweather;
 import java.util.ArrayList;
 
 import az.colorweather.api.model.gson.common.Coord;
-import az.colorweather.api.model.gson.current_day.CurrentWeather;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.util.Temperature;
 
@@ -16,7 +15,7 @@ public interface WeatherContract {
     interface View {
         void updateFiveDayForecast(ArrayList<ForecastDay> weatherForecastElement);
 
-        void updateCurrentWeather(CurrentWeather currentWeather);
+        void updateCurrentDayWeather(ArrayList<ForecastDay> currentWeather);
     }
 
     interface Presenter {

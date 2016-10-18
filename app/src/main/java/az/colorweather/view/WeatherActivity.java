@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.gson.common.Coord;
-import az.colorweather.api.model.gson.current_day.CurrentWeather;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;
@@ -75,23 +74,25 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     protected void onResume() {
         super.onResume();
-        //TODO: REMOVE FOLLOWING AND CHECK LATEST RETRIEVED VALUE AND SETUP UI ACCORDINGLY HERE
-
         setupFiveDaySelectedUi();
 
+        //TODO: REPLACE WITH DEVICE CURRENT LOCATION
         Coord coordinate = new Coord();
         coordinate.setLat(32.8998091);
         coordinate.setLon(-97.0425239);
 
         presenter.getFiveDayForecast(coordinate);
-        presenter.getCurrentDayForecast(coordinate);
     }
 
     @OnClick(R.id.today_button)
     public void todayButtonClick(View view) {
         setupTodaySelectedUi();
 
-        //TODO: CALL TODAY WEATHER FULL FORECAST HERE
+        Coord coordinate = new Coord();
+        coordinate.setLat(32.8998091);
+        coordinate.setLon(-97.0425239);
+
+        presenter.getCurrentDayForecast(coordinate);
     }
 
     private void setupTodaySelectedUi() {
@@ -101,11 +102,11 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         today_button.setTypeface(robotoBlackTypeFace);
         five_day_button.setTypeface(robotoRegularTypeFace);
 
-        first_forecast_day_month.setVisibility(View.GONE);
-        second_forecast_day_month.setVisibility(View.GONE);
-        third_forecast_day_month.setVisibility(View.GONE);
-        fourth_forecast_day_month.setVisibility(View.GONE);
-        fifth_forecast_day_month.setVisibility(View.GONE);
+        first_forecast_day_month.setVisibility(View.INVISIBLE);
+        second_forecast_day_month.setVisibility(View.INVISIBLE);
+        third_forecast_day_month.setVisibility(View.INVISIBLE);
+        fourth_forecast_day_month.setVisibility(View.INVISIBLE);
+        fifth_forecast_day_month.setVisibility(View.INVISIBLE);
     }
 
     @OnClick(R.id.five_day_button)
@@ -117,7 +118,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         coordinate.setLon(-97.0425239);
 
         presenter.getFiveDayForecast(coordinate);
-        presenter.getCurrentDayForecast(coordinate);
     }
 
     private void setupFiveDaySelectedUi() {
@@ -152,9 +152,16 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
     public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
+        String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FIRST_DAY_INDEX).getTemperature());
+        current_weather.setText(tempWithDegrees);
+        current_weather.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIRST_DAY_INDEX).getTemperature())));
         first_forecast_day_month.setText(forecastDays.get(FIRST_DAY_INDEX).getDayMonth());
 
-        String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(SECOND_DAY_INDEX).getTemperature());
+        first_forecast.setText(tempWithDegrees);
+        first_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIRST_DAY_INDEX).getTemperature())));
+        first_forecast_day.setText(getString(R.string.now));
+
+        tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(SECOND_DAY_INDEX).getTemperature());
         second_forecast.setText(tempWithDegrees);
         second_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(SECOND_DAY_INDEX).getTemperature())));
         second_forecast_day.setText(forecastDays.get(SECOND_DAY_INDEX).getDay());
@@ -180,15 +187,34 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     @Override
-    public void updateCurrentWeather(CurrentWeather currentWeather) {
-        int roundedTemp = (int) Math.round(currentWeather.getMain().getTemp());
-        String degrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
+    public void updateCurrentDayWeather(ArrayList<ForecastDay> currentWeather) {
+        String degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FIRST_DAY_INDEX).getTemperature());
         current_weather.setText(degrees);
-        current_weather.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        current_weather.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIRST_DAY_INDEX).getTemperature())));
 
         first_forecast.setText(degrees);
-        first_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        first_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIRST_DAY_INDEX).getTemperature())));
         first_forecast_day.setText(getString(R.string.now));
+
+        degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(SECOND_DAY_INDEX).getTemperature());
+        second_forecast.setText(degrees);
+        second_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(SECOND_DAY_INDEX).getTemperature())));
+        second_forecast_day.setText(currentWeather.get(SECOND_DAY_INDEX).getHourOfForecast());
+
+        degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(THIRD_DAY_INDEX).getTemperature());
+        third_forecast.setText(degrees);
+        third_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(THIRD_DAY_INDEX).getTemperature())));
+        third_forecast_day.setText(currentWeather.get(THIRD_DAY_INDEX).getHourOfForecast());
+
+        degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FOURTH_DAY_INDEX).getTemperature());
+        fourth_forecast.setText(degrees);
+        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FOURTH_DAY_INDEX).getTemperature())));
+        fourth_forecast_day.setText(currentWeather.get(FOURTH_DAY_INDEX).getHourOfForecast());
+
+        degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FIFTH_DAY_INDEX).getTemperature());
+        fifth_forecast.setText(degrees);
+        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIFTH_DAY_INDEX).getTemperature())));
+        fifth_forecast_day.setText(currentWeather.get(FIFTH_DAY_INDEX).getHourOfForecast());
     }
 
     private int getColor(Temperature colorTemp) {
