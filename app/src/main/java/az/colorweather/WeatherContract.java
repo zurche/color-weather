@@ -21,7 +21,7 @@ public interface WeatherContract {
     interface Presenter {
         void getFiveDayForecast(final Coord coordinate);
 
-        void getCurrentDayForecast(final Coord coordinate);
+        void getCurrentDayForecast();
 
         Temperature getColorForTemp(int temp);
     }

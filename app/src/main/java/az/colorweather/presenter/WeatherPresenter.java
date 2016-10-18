@@ -42,7 +42,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
         mOWService.setLanguage(OWSupportedLanguages.SPANISH);
-        mOWService.setMetricUnits(OWSupportedUnits.FAHRENHEIT);
+        mOWService.setMetricUnits(OWSupportedUnits.METRIC);
         mLocale = locale;
         dayFormat = new SimpleDateFormat("EEE", mLocale);
     }
@@ -84,7 +84,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     }
 
     @Override
-    public void getCurrentDayForecast(final Coord coordinate) {
+    public void getCurrentDayForecast() {
         view.updateCurrentDayWeather(mDayForecast);
     }
 
@@ -143,7 +143,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 
-            if (currentDay != tmpDay) {
+            if (currentDay != tmpDay && tmpDay == 0) {
                 int roundedTemp = (int) Math.round(element.getMain().getTemp());
                 String dayName = dayFormat.format(parsedDate);
                 curatedFiveDayForecast.add(
@@ -152,6 +152,18 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                                 "" + currentDay + "/" + currentMonth,
                                 currentHour,
                                 roundedTemp));
+
+                tmpDay = currentDay;
+            } else if (currentDay != tmpDay && currentHour == 15) {
+                int roundedTemp = (int) Math.round(element.getMain().getTemp());
+                String dayName = dayFormat.format(parsedDate);
+                curatedFiveDayForecast.add(
+                        new ForecastDay(
+                                dayName,
+                                "" + currentDay + "/" + currentMonth,
+                                currentHour,
+                                roundedTemp));
+
                 tmpDay = currentDay;
             }
         }

@@ -78,8 +78,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         //TODO: REPLACE WITH DEVICE CURRENT LOCATION
         Coord coordinate = new Coord();
-        coordinate.setLat(32.8998091);
-        coordinate.setLon(-97.0425239);
+        coordinate.setLat(-31.3993437);
+        coordinate.setLon(-64.3344292);
 
         presenter.getFiveDayForecast(coordinate);
     }
@@ -88,11 +88,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     public void todayButtonClick(View view) {
         setupTodaySelectedUi();
 
-        Coord coordinate = new Coord();
-        coordinate.setLat(32.8998091);
-        coordinate.setLon(-97.0425239);
-
-        presenter.getCurrentDayForecast(coordinate);
+        presenter.getCurrentDayForecast();
     }
 
     private void setupTodaySelectedUi() {
@@ -114,8 +110,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         setupFiveDaySelectedUi();
 
         Coord coordinate = new Coord();
-        coordinate.setLat(32.8998091);
-        coordinate.setLon(-97.0425239);
+        coordinate.setLat(-31.3993437);
+        coordinate.setLon(-64.3344292);
 
         presenter.getFiveDayForecast(coordinate);
     }
