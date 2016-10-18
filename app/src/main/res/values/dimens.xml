@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="five_day_forecast_text_size">35sp</dimen>
+    <dimen name="five_day_forecast_day_text_size">25sp</dimen>
 </resources>

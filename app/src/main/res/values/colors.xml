@@ -11,4 +11,8 @@
     <color name="ok">#48e2c0</color>         <!-- >>21 & <<23    |      >>70 & <<74 -->
     <color name="ok_chill">#49e2db</color>   <!-- >>21 & <<15    |      >>60 & <<70 -->
     <color name="cold">#82ceea</color>       <!-- >>15           |      <<60 -->
+
+    <color name="underline_text_color">#0082ceea</color>
+    <color name="underline_background_color">#7ff1dd4b</color>
+
 </resources>

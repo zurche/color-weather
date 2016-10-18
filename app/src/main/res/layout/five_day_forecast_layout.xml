@@ -15,14 +15,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/first_forecast_max"
+            android:id="@+id/first_forecast"
             style="@style/ForecastElement"
             tools:text="56°" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/alert_dark_frame"/>
+
         <TextView
-            android:id="@+id/first_forecast_min"
-            style="@style/ForecastElement"
-            tools:text="9°" />
+            android:id="@+id/first_forecast_day"
+            style="@style/SelectedForecastElementDay"
+            tools:text="MON"/>
 
     </LinearLayout>
 
@@ -34,14 +39,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/second_forecast_max"
+            android:id="@+id/second_forecast"
             style="@style/ForecastElement"
             tools:text="56°" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/alert_dark_frame"/>
+
         <TextView
-            android:id="@+id/second_forecast_min"
-            style="@style/ForecastElement"
-            tools:text="9°" />
+            android:id="@+id/second_forecast_day"
+            style="@style/ForecastElementDay"
+            tools:text="MON"/>
 
     </LinearLayout>
 
@@ -53,14 +63,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/third_forecast_max"
+            android:id="@+id/third_forecast"
             style="@style/ForecastElement"
             tools:text="56°" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/alert_dark_frame"/>
+
         <TextView
-            android:id="@+id/third_forecast_min"
-            style="@style/ForecastElement"
-            tools:text="9°" />
+            android:id="@+id/third_forecast_day"
+            style="@style/ForecastElementDay"
+            tools:text="MON"/>
 
     </LinearLayout>
 
@@ -72,14 +87,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/fourth_forecast_max"
+            android:id="@+id/fourth_forecast"
             style="@style/ForecastElement"
             tools:text="56°" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/alert_dark_frame"/>
+
         <TextView
-            android:id="@+id/fourth_forecast_min"
-            style="@style/ForecastElement"
-            tools:text="9°" />
+            android:id="@+id/fourth_forecast_day"
+            style="@style/ForecastElementDay"
+            tools:text="MON"/>
 
     </LinearLayout>
 
@@ -91,14 +111,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/fifth_forecast_max"
+            android:id="@+id/fifth_forecast"
             style="@style/ForecastElement"
             tools:text="56°" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/alert_dark_frame"/>
+
         <TextView
-            android:id="@+id/fifth_forecast_min"
-            style="@style/ForecastElement"
-            tools:text="9°" />
+            android:id="@+id/fifth_forecast_day"
+            style="@style/ForecastElementDay"
+            tools:text="MON"/>
 
     </LinearLayout>
 

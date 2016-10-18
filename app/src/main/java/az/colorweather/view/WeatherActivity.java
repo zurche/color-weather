@@ -1,41 +1,63 @@
 package az.colorweather.view;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import az.colorweather.R;
-import az.colorweather.util.Temperature;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
+import az.colorweather.util.Temperature;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
 
     private static final String TAG = WeatherActivity.class.getSimpleName();
+    public static final int SECOND_DAY_INDEX = 1;
+    public static final int THIRD_DAY_INDEX = 2;
+    public static final int FOURTH_DAY_INDEX = 3;
+    public static final int FIFTH_DAY_INDEX = 4;
 
     private WeatherPresenter presenter;
 
-    @BindView(R.id.first_forecast_max)  TextView first_forecast_max;
-    @BindView(R.id.second_forecast_max) TextView second_forecast_max;
-    @BindView(R.id.third_forecast_max)  TextView third_forecast_max;
-    @BindView(R.id.fourth_forecast_max) TextView fourth_forecast_max;
-    @BindView(R.id.fifth_forecast_max)  TextView fifth_forecast_max;
+    private Typeface robotoRegularTypeFace;
 
-    @BindView(R.id.first_forecast_min)  TextView first_forecast_min;
-    @BindView(R.id.second_forecast_min) TextView second_forecast_min;
-    @BindView(R.id.third_forecast_min)  TextView third_forecast_min;
-    @BindView(R.id.fourth_forecast_min) TextView fourth_forecast_min;
-    @BindView(R.id.fifth_forecast_min)  TextView fifth_forecast_min;
+    private Typeface robotoBlackTypeFace;
+
+    private SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
+
+    @BindView(R.id.first_forecast)  TextView first_forecast;
+    @BindView(R.id.second_forecast) TextView second_forecast;
+    @BindView(R.id.third_forecast)  TextView third_forecast;
+    @BindView(R.id.fourth_forecast) TextView fourth_forecast;
+    @BindView(R.id.fifth_forecast)  TextView fifth_forecast;
+
+    @BindView(R.id.first_forecast_day)  TextView first_forecast_day;
+    @BindView(R.id.second_forecast_day) TextView second_forecast_day;
+    @BindView(R.id.third_forecast_day)  TextView third_forecast_day;
+    @BindView(R.id.fourth_forecast_day) TextView fourth_forecast_day;
+    @BindView(R.id.fifth_forecast_day)  TextView fifth_forecast_day;
 
     @BindView(R.id.current_weather) TextView current_weather;
+
+    @BindView(R.id.today_button)    TextView today_button;
+    @BindView(R.id.five_day_button) TextView five_day_button;
+
+    @BindView(R.id.degrees_icon) TextView degrees_icon;
+
+    @BindView(R.id.today_underline)    TextView today_underline;
+    @BindView(R.id.five_day_underline) TextView five_day_underline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +68,19 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         presenter = new WeatherPresenter(this);
 
+        robotoRegularTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Regular.ttf");
+        robotoBlackTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Black.ttf");
+
+        setupUiTypeFace();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //TODO: REMOVE FOLLOWING AND CHECK LATEST RETRIEVED VALUE AND SETUP UI ACCORDINGLY HERE
+
+        setupFiveDaySelectedUi();
+
         Coord coordinate = new Coord();
         coordinate.setLat(32.8998091);
         coordinate.setLon(-97.0425239);
@@ -54,66 +89,103 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         presenter.getCurrentDayForecast(coordinate);
     }
 
+    @OnClick(R.id.today_button)
+    public void todayButtonClick(View view) {
+        setupTodaySelectedUi();
+
+        //TODO: CALL TODAY WEATHER FULL FORECAST HERE
+    }
+
+    private void setupTodaySelectedUi() {
+        five_day_underline.setVisibility(View.INVISIBLE);
+        today_underline.setVisibility(View.VISIBLE);
+
+        today_button.setTypeface(robotoBlackTypeFace);
+        five_day_button.setTypeface(robotoRegularTypeFace);
+    }
+
+    @OnClick(R.id.five_day_button)
+    public void fiveDayButtonClick(View view) {
+        setupFiveDaySelectedUi();
+
+        Coord coordinate = new Coord();
+        coordinate.setLat(32.8998091);
+        coordinate.setLon(-97.0425239);
+
+        presenter.getFiveDayForecast(coordinate);
+        presenter.getCurrentDayForecast(coordinate);
+    }
+
+    private void setupFiveDaySelectedUi() {
+        five_day_underline.setVisibility(View.VISIBLE);
+        today_underline.setVisibility(View.INVISIBLE);
+
+        today_button.setTypeface(robotoRegularTypeFace);
+        five_day_button.setTypeface(robotoBlackTypeFace);
+    }
+
+    private void setupUiTypeFace() {
+        first_forecast_day.setTypeface(robotoBlackTypeFace);
+        second_forecast_day.setTypeface(robotoRegularTypeFace);
+        third_forecast_day.setTypeface(robotoRegularTypeFace);
+        fourth_forecast_day.setTypeface(robotoRegularTypeFace);
+        fifth_forecast_day.setTypeface(robotoRegularTypeFace);
+
+        current_weather.setTypeface(robotoBlackTypeFace);
+        first_forecast.setTypeface(robotoBlackTypeFace);
+        second_forecast.setTypeface(robotoBlackTypeFace);
+        third_forecast.setTypeface(robotoBlackTypeFace);
+        fourth_forecast.setTypeface(robotoBlackTypeFace);
+        fifth_forecast.setTypeface(robotoBlackTypeFace);
+
+
+
+        degrees_icon.setTypeface(robotoBlackTypeFace);
+    }
+
+    //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
     public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
-        int roundedMaxTemp = (int) Math.round(forecastDays.get(0).getMaxTempForecast().getMain().getTempMax());
+        int roundedMaxTemp = (int) Math.round(forecastDays.get(SECOND_DAY_INDEX).getMaxTempForecast()
+                .getMain().getTempMax());
         String maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
-        first_forecast_max.setText(maxDegrees);
-        first_forecast_max.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        second_forecast.setText(maxDegrees);
+        second_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        second_forecast_day.setText(dayFormat.format(forecastDays.get(SECOND_DAY_INDEX).getDay()));
 
-        int roundedMinTemp = (int) Math.round(forecastDays.get(0).getMinTempForecast().getMain().getTempMax());
-        String minDegrees = String.format(getString(R.string.degrees_placeholder),roundedMinTemp);
-        first_forecast_min.setText(minDegrees);
-        first_forecast_min.setTextColor(getColor(presenter.getColorForTemp(roundedMinTemp)));
-
-        roundedMaxTemp = (int) Math.round(forecastDays.get(1).getMaxTempForecast().getMain().getTempMax());
+        roundedMaxTemp = (int) Math.round(forecastDays.get(THIRD_DAY_INDEX).getMaxTempForecast()
+                .getMain().getTempMax());
         maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
-        second_forecast_max.setText(maxDegrees);
-        second_forecast_max.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        third_forecast.setText(maxDegrees);
+        third_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        third_forecast_day.setText(dayFormat.format(forecastDays.get(THIRD_DAY_INDEX).getDay()));
 
-        roundedMinTemp = (int) Math.round(forecastDays.get(1).getMinTempForecast().getMain().getTempMax());
-        minDegrees = String.format(getString(R.string.degrees_placeholder),roundedMinTemp);
-        second_forecast_min.setText(minDegrees);
-        second_forecast_min.setTextColor(getColor(presenter.getColorForTemp(roundedMinTemp)));
-
-        roundedMaxTemp = (int) Math.round(forecastDays.get(2).getMaxTempForecast().getMain().getTempMax());
+        roundedMaxTemp = (int) Math.round(forecastDays.get(FOURTH_DAY_INDEX).getMaxTempForecast()
+                .getMain().getTempMax());
         maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
-        third_forecast_max.setText(maxDegrees);
-        third_forecast_max.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        fourth_forecast.setText(maxDegrees);
+        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        fourth_forecast_day.setText(dayFormat.format(forecastDays.get(FOURTH_DAY_INDEX).getDay()));
 
-        roundedMinTemp = (int) Math.round(forecastDays.get(2).getMinTempForecast().getMain().getTempMax());
-        minDegrees = String.format(getString(R.string.degrees_placeholder),roundedMinTemp);
-        third_forecast_min.setText(minDegrees);
-        third_forecast_min.setTextColor(getColor(presenter.getColorForTemp(roundedMinTemp)));
-
-        roundedMaxTemp = (int) Math.round(forecastDays.get(3).getMaxTempForecast().getMain().getTempMax());
+        roundedMaxTemp = (int) Math.round(forecastDays.get(FIFTH_DAY_INDEX).getMaxTempForecast()
+                .getMain().getTempMax());
         maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
-        fourth_forecast_max.setText(maxDegrees);
-        fourth_forecast_max.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-
-        roundedMinTemp = (int) Math.round(forecastDays.get(3).getMinTempForecast().getMain().getTempMax());
-        minDegrees = String.format(getString(R.string.degrees_placeholder),roundedMinTemp);
-        fourth_forecast_min.setText(minDegrees);
-        fourth_forecast_min.setTextColor(getColor(presenter.getColorForTemp(roundedMinTemp)));
-
-        roundedMaxTemp = (int) Math.round(forecastDays.get(4).getMaxTempForecast().getMain().getTempMax());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
-        fifth_forecast_max.setText(maxDegrees);
-        fifth_forecast_max.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-
-        roundedMinTemp = (int) Math.round(forecastDays.get(4).getMinTempForecast().getMain().getTempMax());
-        minDegrees = String.format(getString(R.string.degrees_placeholder),roundedMinTemp);
-        fifth_forecast_min.setText(minDegrees);
-        fifth_forecast_min.setTextColor(getColor(presenter.getColorForTemp(roundedMinTemp)));
-
+        fifth_forecast.setText(maxDegrees);
+        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
+        fifth_forecast_day.setText(dayFormat.format(forecastDays.get(FIFTH_DAY_INDEX).getDay()));
     }
 
     @Override
     public void updateCurrentWeather(CurrentWeather currentWeather) {
         int roundedTemp = (int) Math.round(currentWeather.getMain().getTemp());
-        String degrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
+        String degrees = "" + roundedTemp;
         current_weather.setText(degrees);
         current_weather.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        degrees_icon.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+
+        first_forecast.setText(degrees);
+        first_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        first_forecast_day.setText(getString(R.string.now));
     }
 
     private int getColor(Temperature colorTemp) {

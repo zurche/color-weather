@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/day_selection_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    tools:showIn="@layout/activity_weather">
+
+    <TextView
+        android:id="@+id/today_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/today"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/today_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="23dp"
+        android:background="@color/underline_background_color"
+        android:text="@string/today"
+        android:textColor="@color/underline_text_color"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/five_day_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/_5_day"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/five_day_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="23dp"
+        android:background="@color/underline_background_color"
+        android:text="@string/_5_day"
+        android:textColor="@color/underline_text_color"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
