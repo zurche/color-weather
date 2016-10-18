@@ -35,8 +35,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     public WeatherPresenter(WeatherContract.View view) {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
-        mOWService.setLanguage(OWSupportedLanguages.ENGLISH);
-        mOWService.setMetricUnits(OWSupportedUnits.FAHRENHEIT);
+        mOWService.setLanguage(OWSupportedLanguages.SPANISH);
+        mOWService.setMetricUnits(OWSupportedUnits.METRIC);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                     Log.d(TAG, weather.getDtTxt() + " - Got Temp: " + weather.getMain().getTemp() + "°");
                 }
 
-                ArrayList<ForecastDay> curatedList = filterTemps(extendedWeather);
+                ArrayList<WeatherForecastElement> curatedList = filterTemps(extendedWeather);
                 view.updateFiveDayForecast(curatedList);
             }
 
@@ -113,18 +113,15 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         return tempColor;
     }
 
-    private ArrayList<ForecastDay> filterTemps(ExtendedWeather extendedWeather) {
-        ArrayList<ForecastDay> curatedFiveDayforecast = new ArrayList();
+    private ArrayList<WeatherForecastElement> filterTemps(ExtendedWeather extendedWeather) {
+        ArrayList<WeatherForecastElement> curatedFiveDayforecast = new ArrayList();
 
-        WeatherForecastElement tmpMax = null;
-        WeatherForecastElement tmpMin = null;
-        Date parsedDate = null;
         int tmpDay = 0;
 
         for (WeatherForecastElement element :
                 extendedWeather.getList()) {
 
-            parsedDate = new Date();
+            Date parsedDate = new Date();
             try {
                 parsedDate = weatherDateStampFormat.parse(element.getDtTxt());
             } catch (ParseException e) {
@@ -134,37 +131,11 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-            //If current day is bigger than tmpDay it means we are checking a new day, add new
-            //forecast day with current max and min values here
-            if (currentDay > tmpDay) {
-                if (tmpDay != 0) {
-                    curatedFiveDayforecast.add(new ForecastDay(tmpMax, tmpMin, parsedDate));
-                }
+            if (currentDay != tmpDay) {
+                curatedFiveDayforecast.add(element);
                 tmpDay = currentDay;
-                tmpMax = null;
-                tmpMin = null;
             }
-
-            if (null == tmpMax) {
-                tmpMax = element;
-            }
-
-            if (null == tmpMin) {
-                tmpMin = element;
-            }
-
-            if (element.getMain().getTempMax() > tmpMax.getMain().getTempMax()) {
-                tmpMax = element;
-            }
-
-            if (element.getMain().getTempMax() < tmpMin.getMain().getTempMin()) {
-                tmpMin = element;
-            }
-
         }
-
-        //This case is for the last day scenario
-        curatedFiveDayforecast.add(new ForecastDay(tmpMax, tmpMin, parsedDate));
 
         return curatedFiveDayforecast;
     }

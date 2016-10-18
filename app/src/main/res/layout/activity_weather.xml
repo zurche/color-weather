@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingTop="50dp"
-        android:textSize="200sp"
+        android:textSize="170sp"
         tools:text="5"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
@@ -29,7 +29,7 @@
         android:id="@+id/degrees_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="200sp"
+        android:textSize="170sp"
         android:text="@string/degrees_icon"
         android:layout_alignBaseline="@+id/current_weather"
         android:layout_alignBottom="@+id/current_weather"

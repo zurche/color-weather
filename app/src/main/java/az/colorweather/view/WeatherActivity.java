@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import az.colorweather.R;
 import az.colorweather.WeatherContract;
 import az.colorweather.api.model.gson.common.Coord;
 import az.colorweather.api.model.gson.current_day.CurrentWeather;
+import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;
@@ -35,7 +37,9 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     private Typeface robotoBlackTypeFace;
 
-    private SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
+    private SimpleDateFormat dayFormat;
+
+    private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @BindView(R.id.first_forecast)  TextView first_forecast;
     @BindView(R.id.second_forecast) TextView second_forecast;
@@ -72,6 +76,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         robotoBlackTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Black.ttf");
 
         setupUiTypeFace();
+
+        dayFormat = new SimpleDateFormat("EEE", getResources().getConfiguration().locale);
     }
 
     @Override
@@ -138,41 +144,51 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         fourth_forecast.setTypeface(robotoBlackTypeFace);
         fifth_forecast.setTypeface(robotoBlackTypeFace);
 
-
-
         degrees_icon.setTypeface(robotoBlackTypeFace);
     }
 
     //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
-    public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
-        int roundedMaxTemp = (int) Math.round(forecastDays.get(SECOND_DAY_INDEX).getMaxTempForecast()
-                .getMain().getTempMax());
-        String maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
+    public void updateFiveDayForecast(ArrayList<WeatherForecastElement> forecastDays) {
+        int roundedTemp = (int) Math.round(forecastDays.get(SECOND_DAY_INDEX).getMain().getTemp());
+        String maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         second_forecast.setText(maxDegrees);
-        second_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-        second_forecast_day.setText(dayFormat.format(forecastDays.get(SECOND_DAY_INDEX).getDay()));
+        second_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        try {
+            second_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(SECOND_DAY_INDEX).getDtTxt())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        roundedMaxTemp = (int) Math.round(forecastDays.get(THIRD_DAY_INDEX).getMaxTempForecast()
-                .getMain().getTempMax());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
+        roundedTemp = (int) Math.round(forecastDays.get(THIRD_DAY_INDEX).getMain().getTemp());
+        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         third_forecast.setText(maxDegrees);
-        third_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-        third_forecast_day.setText(dayFormat.format(forecastDays.get(THIRD_DAY_INDEX).getDay()));
+        third_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        try {
+            third_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(THIRD_DAY_INDEX).getDtTxt())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        roundedMaxTemp = (int) Math.round(forecastDays.get(FOURTH_DAY_INDEX).getMaxTempForecast()
-                .getMain().getTempMax());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
+        roundedTemp = (int) Math.round(forecastDays.get(FOURTH_DAY_INDEX).getMain().getTemp());
+        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         fourth_forecast.setText(maxDegrees);
-        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-        fourth_forecast_day.setText(dayFormat.format(forecastDays.get(FOURTH_DAY_INDEX).getDay()));
+        fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        try {
+            fourth_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(FOURTH_DAY_INDEX).getDtTxt())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        roundedMaxTemp = (int) Math.round(forecastDays.get(FIFTH_DAY_INDEX).getMaxTempForecast()
-                .getMain().getTempMax());
-        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedMaxTemp);
+        roundedTemp = (int) Math.round(forecastDays.get(FIFTH_DAY_INDEX).getMain().getTemp());
+        maxDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         fifth_forecast.setText(maxDegrees);
-        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedMaxTemp)));
-        fifth_forecast_day.setText(dayFormat.format(forecastDays.get(FIFTH_DAY_INDEX).getDay()));
+        fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
+        try {
+            fifth_forecast_day.setText(dayFormat.format(weatherDateStampFormat.parse(forecastDays.get(FIFTH_DAY_INDEX).getDtTxt())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
