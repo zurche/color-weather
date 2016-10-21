@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import az.colorweather.WeatherContract;
 import az.colorweather.api.OWService;
@@ -50,7 +52,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     @Override
     public void getFiveDayForecast(final Coord coordinate) {
 
-        if(canUpdateForecast()) {
+        if (canUpdateForecast()) {
             mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
                 @Override
                 public void onResponse(OWResponse<ExtendedWeather> response) {
@@ -72,8 +74,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     }
 
     private boolean canUpdateForecast() {
-        if(mLastRetrievedDateStamp != null && mFiveDayForecast != null) {
-            if(System.currentTimeMillis() - mLastRetrievedDateStamp.getTime() > TEN_MINUTES) {
+        if (mLastRetrievedDateStamp != null && mFiveDayForecast != null) {
+            if (System.currentTimeMillis() - mLastRetrievedDateStamp.getTime() > TEN_MINUTES) {
                 return true;
             } else {
                 return false;
@@ -91,8 +93,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     @Override
     public Temperature getColorForTemp(int temp) {
         Temperature tempColor = Temperature.OK;
-        if(mOWService.getSelectedMetricSystem() == OWSupportedUnits.METRIC){
-            if(temp > 28){
+        if (mOWService.getSelectedMetricSystem() == OWSupportedUnits.METRIC) {
+            if (temp > 28) {
                 tempColor = Temperature.SUPER_HOT;
             } else if (temp > 26 & temp < 28) {
                 tempColor = Temperature.MEDIUM_HOT;
@@ -105,8 +107,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             } else if (temp < 15) {
                 tempColor = Temperature.COLD;
             }
-        } else if (mOWService.getSelectedMetricSystem() == OWSupportedUnits.FAHRENHEIT){
-            if(temp > 84){
+        } else if (mOWService.getSelectedMetricSystem() == OWSupportedUnits.FAHRENHEIT) {
+            if (temp > 84) {
                 tempColor = Temperature.SUPER_HOT;
             } else if (temp > 80 & temp < 84) {
                 tempColor = Temperature.MEDIUM_HOT;
@@ -124,9 +126,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     }
 
     private ArrayList<ForecastDay> filterTemps(ExtendedWeather extendedWeather) {
-        ArrayList<ForecastDay> curatedFiveDayForecast = new ArrayList();
-
-        int tmpDay = 0;
+        ArrayList<ForecastDay> curatedFiveDayForecast = new ArrayList<>();
+        Map<Integer, ForecastDay> sortedTemperaturesMap = new TreeMap<>();
 
         for (WeatherForecastElement element :
                 extendedWeather.getList()) {
@@ -143,29 +144,26 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             int currentMonth = calendar.get(Calendar.MONTH);
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 
-            if (currentDay != tmpDay && tmpDay == 0) {
-                int roundedTemp = (int) Math.round(element.getMain().getTemp());
-                String dayName = dayFormat.format(parsedDate);
-                curatedFiveDayForecast.add(
-                        new ForecastDay(
-                                dayName,
-                                "" + currentDay + "/" + currentMonth,
-                                currentHour,
-                                roundedTemp));
+            int roundedTemp = (int) Math.round(element.getMain().getTemp());
+            String dayName = dayFormat.format(parsedDate);
 
-                tmpDay = currentDay;
-            } else if (currentDay != tmpDay && currentHour == 15) {
-                int roundedTemp = (int) Math.round(element.getMain().getTemp());
-                String dayName = dayFormat.format(parsedDate);
-                curatedFiveDayForecast.add(
-                        new ForecastDay(
-                                dayName,
-                                "" + currentDay + "/" + currentMonth,
-                                currentHour,
-                                roundedTemp));
+            ForecastDay tempForecast = new ForecastDay(dayName,
+                    "" + currentDay + "/" + currentMonth,
+                    currentHour,
+                    roundedTemp);
 
-                tmpDay = currentDay;
+            //If it is the first temp of the day, then add it
+            if(sortedTemperaturesMap.get(currentDay) == null) {
+                sortedTemperaturesMap.put(currentDay, tempForecast);
+                //Otherwise check if the current checked temp for this day is greater than
+                //the already stored one, if thats true, then replace the current day greatest temp.
+            } else if (roundedTemp > sortedTemperaturesMap.get(currentDay).getTemperature()) {
+                sortedTemperaturesMap.put(currentDay, tempForecast);
             }
+        }
+
+        for (Map.Entry<Integer, ForecastDay> entry : sortedTemperaturesMap.entrySet()) {
+            curatedFiveDayForecast.add(entry.getValue());
         }
 
         return curatedFiveDayForecast;
@@ -200,7 +198,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
             currentDayCount++;
 
-            if(currentDayCount == 5) {
+            if (currentDayCount == 5) {
                 break;
             }
         }
