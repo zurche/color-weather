@@ -43,6 +43,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     public WeatherPresenter(WeatherContract.View view, Locale locale) {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
+        //TODO: Set language based on LOCALE
         mOWService.setLanguage(OWSupportedLanguages.SPANISH);
         mOWService.setMetricUnits(OWSupportedUnits.METRIC);
         mLocale = locale;
