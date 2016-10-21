@@ -86,6 +86,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         }
     }
 
+    //TODO: Update name to getCurrentDayExtendedForecast since currentDayForecast brings currentForecast value and 
+    //should be used to obtain current forecast.
     @Override
     public void getCurrentDayForecast() {
         view.updateCurrentDayWeather(mDayForecast);
