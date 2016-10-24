@@ -21,6 +21,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/loading_weather_progress" />
+
     <include layout="@layout/five_day_forecast_layout" />
 
     <include layout="@layout/day_selection_layout" />

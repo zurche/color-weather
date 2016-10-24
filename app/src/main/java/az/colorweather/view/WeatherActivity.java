@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @BindView(R.id.today_underline)    TextView today_underline;
     @BindView(R.id.five_day_underline) TextView five_day_underline;
 
+    @BindView(R.id.loading_weather_progress) ProgressBar loading_weather_progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         coordinate.setLon(-64.3344292);
 
         presenter.getFiveDayForecast(coordinate);
+
+        loading_weather_progress.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.today_button)
@@ -149,6 +154,13 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
     public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
+        enableModeButtons();
+
+
+        updateForecastInUi(forecastDays);
+    }
+
+    private void updateForecastInUi(ArrayList<ForecastDay> forecastDays) {
         String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FIRST_DAY_INDEX).getTemperature());
         first_forecast_day_month.setText(forecastDays.get(FIRST_DAY_INDEX).getDayMonth());
 
@@ -178,6 +190,11 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIFTH_DAY_INDEX).getTemperature())));
         fifth_forecast_day.setText(forecastDays.get(FIFTH_DAY_INDEX).getDay());
         fifth_forecast_day_month.setText(forecastDays.get(FIFTH_DAY_INDEX).getDayMonth());
+    }
+
+    private void enableModeButtons() {
+        five_day_button.setEnabled(true);
+        today_button.setEnabled(true);
     }
 
     @Override
@@ -212,6 +229,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     @Override
     public void updateTodayForecast(CurrentWeather currentWeather) {
+        loading_weather_progress.setVisibility(View.INVISIBLE);
+
         int roundedTemp = (int) Math.round(currentWeather.getMain().getTemp());
         String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
         current_weather.setText(tempWithDegrees);
