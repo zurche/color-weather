@@ -154,7 +154,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         first_forecast.setText(tempWithDegrees);
         first_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIRST_DAY_INDEX).getTemperature())));
-        first_forecast_day.setText(getString(R.string.now));
 
         tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(SECOND_DAY_INDEX).getTemperature());
         second_forecast.setText(tempWithDegrees);
@@ -189,7 +188,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         first_forecast.setText(degrees);
         first_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIRST_DAY_INDEX).getTemperature())));
-        first_forecast_day.setText(getString(R.string.now));
 
         degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(SECOND_DAY_INDEX).getTemperature());
         second_forecast.setText(degrees);

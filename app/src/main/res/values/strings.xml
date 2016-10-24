@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ColorWeather</string>
-    <string name="degrees_placeholder">%d°</string>
-    <string name="degrees_icon">°</string>
+    <string name="degrees_placeholder" translatable="false">%d°</string>
+    <string name="degrees_icon" translatable="false">°</string>
     <string name="now">NOW</string>
     <string name="today">today</string>
     <string name="_5_day">5 day</string>

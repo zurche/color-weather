@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">ColorWeather</string>
     <string name="now">HOY</string>
+    <string name="_5_day">5 días</string>
+    <string name="today">hoy</string>
 </resources>
