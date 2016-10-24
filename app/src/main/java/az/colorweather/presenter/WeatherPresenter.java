@@ -18,6 +18,7 @@ import az.openweatherapi.OWService;
 import az.openweatherapi.listener.OWRequestListener;
 import az.openweatherapi.model.OWResponse;
 import az.openweatherapi.model.gson.common.Coord;
+import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import az.openweatherapi.model.gson.five_day.ExtendedWeather;
 import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
 import az.openweatherapi.utils.OWSupportedLanguages;
@@ -39,6 +40,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     private ArrayList<ForecastDay> mFiveDayForecast;
     private ArrayList<ForecastDay> mDayForecast;
     private Date mLastRetrievedDateStamp;
+    private CurrentWeather mCurrentWeather;
 
     public WeatherPresenter(WeatherContract.View view, Locale locale) {
         this.view = view;
@@ -62,6 +64,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                     mDayForecast = filterUpcomingFiveForecasts(extendedWeather);
                     view.updateFiveDayForecast(mFiveDayForecast);
                     mLastRetrievedDateStamp = new Date(System.currentTimeMillis());
+
+                    getCurrentForecast(coordinate);
                 }
 
                 @Override
@@ -71,6 +75,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             });
         } else {
             view.updateFiveDayForecast(mFiveDayForecast);
+            view.updateTodayForecast(mCurrentWeather);
         }
     }
 
@@ -86,11 +91,30 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         }
     }
 
-    //TODO: Update name to getCurrentDayExtendedForecast since currentDayForecast brings currentForecast value and 
-    //should be used to obtain current forecast.
+    /**
+     * Retrieves extended forecast for today.
+     */
     @Override
-    public void getCurrentDayForecast() {
-        view.updateCurrentDayWeather(mDayForecast);
+    public void getCurrentDayExtendedForecast() {
+        view.updateCurrentDayExtendedForecast(mDayForecast);
+    }
+
+    /**
+     * Retrieves current moment forecast.
+     */
+    private void getCurrentForecast(final Coord coordinate) {
+        mOWService.getCurrentDayForecast(coordinate, new OWRequestListener<CurrentWeather>() {
+            @Override
+            public void onResponse(OWResponse<CurrentWeather> response) {
+                mCurrentWeather = response.body();
+                view.updateTodayForecast(mCurrentWeather);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "Current Day Forecast request failed: " + t.getMessage());
+            }
+        });
     }
 
     @Override

@@ -15,6 +15,7 @@ import az.openweatherapi.model.gson.common.Coord;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;
+import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -88,7 +89,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     public void todayButtonClick(View view) {
         setupTodaySelectedUi();
 
-        presenter.getCurrentDayForecast();
+        presenter.getCurrentDayExtendedForecast();
     }
 
     private void setupTodaySelectedUi() {
@@ -149,8 +150,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
         String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FIRST_DAY_INDEX).getTemperature());
-        current_weather.setText(tempWithDegrees);
-        current_weather.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIRST_DAY_INDEX).getTemperature())));
         first_forecast_day_month.setText(forecastDays.get(FIRST_DAY_INDEX).getDayMonth());
 
         first_forecast.setText(tempWithDegrees);
@@ -183,7 +182,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     @Override
-    public void updateCurrentDayWeather(ArrayList<ForecastDay> currentWeather) {
+    public void updateCurrentDayExtendedForecast(ArrayList<ForecastDay> currentWeather) {
         String degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FIRST_DAY_INDEX).getTemperature());
         current_weather.setText(degrees);
         current_weather.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIRST_DAY_INDEX).getTemperature())));
@@ -211,6 +210,14 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         fifth_forecast.setText(degrees);
         fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIFTH_DAY_INDEX).getTemperature())));
         fifth_forecast_day.setText(currentWeather.get(FIFTH_DAY_INDEX).getHourOfForecast());
+    }
+
+    @Override
+    public void updateTodayForecast(CurrentWeather currentWeather) {
+        int roundedTemp = (int) Math.round(currentWeather.getMain().getTemp());
+        String tempWithDegrees = String.format(getString(R.string.degrees_placeholder), roundedTemp);
+        current_weather.setText(tempWithDegrees);
+        current_weather.setTextColor(getColor(presenter.getColorForTemp(roundedTemp)));
     }
 
     private int getColor(Temperature colorTemp) {
