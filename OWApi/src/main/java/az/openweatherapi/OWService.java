@@ -1,5 +1,7 @@
 package az.openweatherapi;
 
+import java.util.Locale;
+
 import az.openweatherapi.listener.OWRequestListener;
 import az.openweatherapi.model.OWResponse;
 import az.openweatherapi.model.gson.common.Coord;
@@ -54,8 +56,64 @@ public class OWService {
         mSelectedUnits = units;
     }
 
-    public void setLanguage(OWSupportedLanguages language) {
-        mSelectedLanguage = language;
+    /**
+     * Sets the API language based on a Locale.
+     * @param language Locale of current language.
+     */
+    public void setLanguage(Locale language) {
+        switch (language.getLanguage()) {
+            case "en":
+                mSelectedLanguage = OWSupportedLanguages.ENGLISH;
+                break;
+            case "ru":
+                mSelectedLanguage = OWSupportedLanguages.RUSSIAN;
+                break;
+            case "it":
+                mSelectedLanguage = OWSupportedLanguages.ITALIAN;
+                break;
+            case "es":
+                mSelectedLanguage = OWSupportedLanguages.SPANISH;
+                break;
+            case "ro":
+                mSelectedLanguage = OWSupportedLanguages.ROMANIAN;
+                break;
+            case "pl":
+                mSelectedLanguage = OWSupportedLanguages.POLISH;
+                break;
+            case "fi":
+                mSelectedLanguage = OWSupportedLanguages.FINNISH;
+                break;
+            case "nl":
+                mSelectedLanguage = OWSupportedLanguages.DUTCH;
+                break;
+            case "fr":
+                mSelectedLanguage = OWSupportedLanguages.FRENCH;
+                break;
+            case "bg":
+                mSelectedLanguage = OWSupportedLanguages.BULGARIAN;
+                break;
+            case "sv":
+                mSelectedLanguage = OWSupportedLanguages.SWEDISH;
+                break;
+            case "zh_tw":
+                mSelectedLanguage = OWSupportedLanguages.CHINESE_T;
+                break;
+            case "zh":
+                mSelectedLanguage = OWSupportedLanguages.CHINESE_S;
+                break;
+            case "tr":
+                mSelectedLanguage = OWSupportedLanguages.TURKISH;
+                break;
+            case "hr":
+                mSelectedLanguage = OWSupportedLanguages.CROATIAN;
+                break;
+            case "co":
+                mSelectedLanguage = OWSupportedLanguages.CATALAN;
+                break;
+            default:
+                mSelectedLanguage = OWSupportedLanguages.ENGLISH;
+                break;
+        }
     }
 
     /**

@@ -21,7 +21,6 @@ import az.openweatherapi.model.gson.common.Coord;
 import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import az.openweatherapi.model.gson.five_day.ExtendedWeather;
 import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
-import az.openweatherapi.utils.OWSupportedLanguages;
 import az.openweatherapi.utils.OWSupportedUnits;
 
 /**
@@ -46,7 +45,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         this.view = view;
         mOWService = new OWService("b97081fb50c5b5c19841ec6ae4f5daec");
         //TODO: Set language based on LOCALE
-        mOWService.setLanguage(OWSupportedLanguages.SPANISH);
+        mOWService.setLanguage(locale);
         mOWService.setMetricUnits(OWSupportedUnits.METRIC);
         mLocale = locale;
         dayFormat = new SimpleDateFormat("EEE", mLocale);
