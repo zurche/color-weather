@@ -12,16 +12,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import az.colorweather.WeatherContract;
-import az.colorweather.api.OWService;
-import az.colorweather.api.listener.OWRequestListener;
-import az.colorweather.api.model.OWResponse;
-import az.colorweather.api.model.gson.common.Coord;
-import az.colorweather.api.model.gson.five_day.ExtendedWeather;
-import az.colorweather.api.model.gson.five_day.WeatherForecastElement;
-import az.colorweather.api.utils.OWSupportedLanguages;
-import az.colorweather.api.utils.OWSupportedUnits;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.util.Temperature;
+import az.openweatherapi.OWService;
+import az.openweatherapi.listener.OWRequestListener;
+import az.openweatherapi.model.OWResponse;
+import az.openweatherapi.model.gson.common.Coord;
+import az.openweatherapi.model.gson.five_day.ExtendedWeather;
+import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
+import az.openweatherapi.utils.OWSupportedLanguages;
+import az.openweatherapi.utils.OWSupportedUnits;
 
 /**
  * Created by az on 13/10/16.

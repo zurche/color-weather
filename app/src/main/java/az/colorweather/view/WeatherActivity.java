@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
-import az.colorweather.api.model.gson.common.Coord;
+import az.openweatherapi.model.gson.common.Coord;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;

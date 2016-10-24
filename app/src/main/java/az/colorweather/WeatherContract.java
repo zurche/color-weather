@@ -2,7 +2,7 @@ package az.colorweather;
 
 import java.util.ArrayList;
 
-import az.colorweather.api.model.gson.common.Coord;
+import az.openweatherapi.model.gson.common.Coord;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.util.Temperature;
 
