@@ -183,6 +183,12 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         third_forecast_day_month.setVisibility(View.VISIBLE);
         fourth_forecast_day_month.setVisibility(View.VISIBLE);
         fifth_forecast_day_month.setVisibility(View.VISIBLE);
+
+        first_forecast_day_month.setText("");
+        second_forecast_day_month.setText("");
+        third_forecast_day_month.setText("");
+        fourth_forecast_day_month.setText("");
+        fifth_forecast_day_month.setText("");
     }
 
     private void setupUiTypeFace() {
@@ -200,11 +206,9 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         fifth_forecast.setTypeface(robotoBlackTypeFace);
     }
 
-    //TODO: LIST OBTAINED MUST HAVE ONLY DATA USED IN THE SCREEN TO AVOID OVER ACCESSING FUNCTIONS
     @Override
     public void updateFiveDayForecast(ArrayList<ForecastDay> forecastDays) {
         enableModeButtons();
-
 
         updateForecastInUi(forecastDays);
     }
