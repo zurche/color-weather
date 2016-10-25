@@ -5,4 +5,8 @@
     <string name="now">NOW</string>
     <string name="today">today</string>
     <string name="_5_day">5 day</string>
+    <string name="saved_latitude">saved_latitude</string>
+    <string name="saved_longitude">saved_longitude</string>
+    <integer name="latitude_default">-31</integer>
+    <integer name="longitude_default">-64</integer>
 </resources>
