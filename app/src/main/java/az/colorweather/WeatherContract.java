@@ -8,9 +8,8 @@ import az.colorweather.util.Temperature;
 import az.openweatherapi.model.gson.current_day.CurrentWeather;
 
 /**
- * Created by az on 13/10/16.
+ * Actions that can should be performed by both the View and its Presenter.
  */
-
 public interface WeatherContract {
 
     interface View {

@@ -24,9 +24,8 @@ import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
 import az.openweatherapi.utils.OWSupportedUnits;
 
 /**
- * Created by az on 13/10/16.
+ * Presenter of the ColorWeather main screen.
  */
-
 public class WeatherPresenter implements WeatherContract.Presenter {
 
     private static final String TAG = WeatherPresenter.class.getSimpleName();

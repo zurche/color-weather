@@ -1,9 +1,8 @@
 package az.colorweather.util;
 
 /**
- * Created by az on 18/10/16.
+ * Enum used to convert any given temperature to Its specific color.
  */
-
 public enum Temperature {
     SUPER_HOT,
     MEDIUM_HOT,

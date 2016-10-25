@@ -1,15 +1,15 @@
 package az.colorweather.model;
 
 /**
- * Created by az on 14/10/16.
+ * This class is used to simplify the data obtained from the forecast into something
+ * with less useless information for the UI.
  */
-
 public class ForecastDay {
 
-    String day;
-    String dayString;
-    String hourOfForecast;
-    int temperature;
+    private String day;
+    private String dayString;
+    private String hourOfForecast;
+    private int temperature;
 
     public ForecastDay(String day, String dayString, int hourOfForecast, int temperature) {
         this.day = day;
