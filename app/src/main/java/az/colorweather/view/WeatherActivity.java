@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
-import az.openweatherapi.model.gson.common.Coord;
 import az.colorweather.model.ForecastDay;
 import az.colorweather.presenter.WeatherPresenter;
 import az.colorweather.util.Temperature;
+import az.openweatherapi.model.gson.common.Coord;
 import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import butterknife.BindView;
 import butterknife.ButterKnife;
