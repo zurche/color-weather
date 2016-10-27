@@ -1,25 +1,16 @@
 package az.colorweather.view;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
@@ -33,10 +24,10 @@ import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
+import rx.functions.Action1;
 
-public class WeatherActivity extends AppCompatActivity implements WeatherContract.View,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
 
     private static final String TAG = WeatherActivity.class.getSimpleName();
     public static final int FIRST_DAY_INDEX = 0;
@@ -50,8 +41,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     private Typeface robotoRegularTypeFace;
 
     private Typeface robotoBlackTypeFace;
-
-    private GoogleApiClient mGoogleApiClient;
 
     @BindView(R.id.first_forecast)
     TextView first_forecast;
@@ -111,14 +100,26 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         robotoRegularTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Regular.ttf");
         robotoBlackTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Black.ttf");
         setupUiTypeFace();
+        retrieveLatestKnownLocationAndCheckFiveDayWeather();
+    }
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+    private void retrieveLatestKnownLocationAndCheckFiveDayWeather() {
+        ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+
+        locationProvider.getLastKnownLocation()
+                .subscribe(new Action1<Location>() {
+                    @Override
+                    public void call(Location location) {
+                        Coord coordinate = new Coord();
+                        coordinate.setLat(location.getLatitude());
+                        coordinate.setLon(location.getLongitude());
+
+                        presenter.getFiveDayForecast(coordinate);
+                    }
+                });
     }
 
     @Override
@@ -127,16 +128,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         setupFiveDaySelectedUi();
 
         loading_weather_progress.setVisibility(View.VISIBLE);
-    }
-
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
     }
 
     @OnClick(R.id.today_button)
@@ -164,11 +155,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     public void fiveDayButtonClick(View view) {
         setupFiveDaySelectedUi();
 
-        Coord coordinate = new Coord();
-        coordinate.setLat(-31.3993437);
-        coordinate.setLon(-64.3344292);
-
-        presenter.getFiveDayForecast(coordinate);
+        retrieveLatestKnownLocationAndCheckFiveDayWeather();
     }
 
     private void setupFiveDaySelectedUi() {
@@ -317,47 +304,4 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         return color;
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        Coord coordinates = new Coord();
-
-        if (mLastLocation != null) {
-            coordinates.setLat(mLastLocation.getLatitude());
-            coordinates.setLon(mLastLocation.getLongitude());
-
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putFloat(getString(R.string.saved_latitude), (float) mLastLocation.getLatitude());
-            editor.putFloat(getString(R.string.saved_longitude), (float) mLastLocation.getLongitude());
-            editor.commit();
-        } else {
-            float defaultLatitude = getResources().getInteger(R.integer.latitude_default);
-            float defaultLongitude = getResources().getInteger(R.integer.longitude_default);
-
-            float savedLatitude = sharedPref.getFloat(getString(R.string.saved_latitude), defaultLatitude);
-            float savedLongitude = sharedPref.getFloat(getString(R.string.saved_longitude), defaultLongitude);
-
-            coordinates.setLat((double) savedLatitude);
-            coordinates.setLon((double) savedLongitude);
-        }
-
-        presenter.getFiveDayForecast(coordinates);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Toast.makeText(this, "Could not retrieve location\nCheck GPS", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "Could not retrieve location\nCheck GPS", Toast.LENGTH_LONG).show();
-    }
 }
