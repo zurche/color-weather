@@ -1,1 +1,1 @@
-include ':app', ':OWApi'
+include ':app'

@@ -38,5 +38,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
-    compile project(path: ':OWApi')
+    compile 'com.github.zurche:open-weather-map-android-wrapper:-SNAPSHOT'
 }
