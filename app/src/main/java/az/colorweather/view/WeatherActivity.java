@@ -119,7 +119,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     private void retrieveLatestKnownLocationAndCheckFiveDayWeather() {
-        ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
+        /*ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
 
         locationProvider.getLastKnownLocation()
                 .subscribe(new Action1<Location>() {
@@ -131,7 +131,14 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
                         presenter.getFiveDayForecast(coordinate);
                     }
-                });
+                });*/ //TODO: UNCOMMENT THIS
+
+        Coord coordinate = new Coord();
+        coordinate.setLat(-31.41);
+        coordinate.setLon(-64.19);
+
+        presenter.getFiveDayForecast(coordinate);
+
     }
 
     @Override

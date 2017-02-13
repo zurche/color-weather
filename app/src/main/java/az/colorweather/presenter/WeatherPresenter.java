@@ -31,7 +31,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
     private static final String TAG = WeatherPresenter.class.getSimpleName();
     public static final int TEN_MINUTES = 600000;
     private WeatherContract.View view;
-    private SimpleDateFormat weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat weatherDateStampFormat;
     private OWService mOWService;
     private Locale mLocale;
     private SimpleDateFormat dayFormat;
@@ -47,11 +47,11 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         mOWService.setMetricUnits(OWSupportedUnits.METRIC);
         mLocale = locale;
         dayFormat = new SimpleDateFormat("EEE", mLocale);
+        weatherDateStampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", mLocale);
     }
 
     @Override
     public void getFiveDayForecast(final Coord coordinate) {
-
         if (canUpdateForecast()) {
             mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
                 @Override
@@ -161,7 +161,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentMonth = calendar.get(Calendar.MONTH) + 1;
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 
             int roundedTemp = (int) Math.round(element.getMain().getTemp());
@@ -176,7 +176,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             if(sortedTemperaturesMap.get(currentDay) == null) {
                 sortedTemperaturesMap.put(currentDay, tempForecast);
                 //Otherwise check if the current checked temp for this day is greater than
-                //the already stored one, if thats true, then replace the current day greatest temp.
+                //the already stored one, if that's true, then replace the current day greatest temp.
             } else if (roundedTemp > sortedTemperaturesMap.get(currentDay).getTemperature()) {
                 sortedTemperaturesMap.put(currentDay, tempForecast);
             }
@@ -205,7 +205,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(parsedDate);
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentMonth = calendar.get(Calendar.MONTH) + 1;
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 
             int roundedTemp = (int) Math.round(element.getMain().getTemp());
