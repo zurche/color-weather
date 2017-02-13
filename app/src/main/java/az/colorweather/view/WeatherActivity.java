@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     public static final int THIRD_DAY_INDEX = 2;
     public static final int FOURTH_DAY_INDEX = 3;
     public static final int FIFTH_DAY_INDEX = 4;
+    private static final int LOCATION_REQUEST_ID = 10;
 
     private WeatherPresenter presenter;
 
@@ -100,14 +102,24 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         robotoRegularTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Regular.ttf");
         robotoBlackTypeFace = Typeface.createFromAsset(getAssets(), "Roboto-Black.ttf");
         setupUiTypeFace();
-        retrieveLatestKnownLocationAndCheckFiveDayWeather();
+        checkLocationPermissions();
+    }
+
+    private void checkLocationPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            retrieveLatestKnownLocationAndCheckFiveDayWeather();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_REQUEST_ID);
+        }
     }
 
     private void retrieveLatestKnownLocationAndCheckFiveDayWeather() {
         ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
 
         locationProvider.getLastKnownLocation()
                 .subscribe(new Action1<Location>() {
@@ -120,6 +132,22 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
                         presenter.getFiveDayForecast(coordinate);
                     }
                 });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_REQUEST_ID: {
+                if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                        && (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                    retrieveLatestKnownLocationAndCheckFiveDayWeather();
+                } else {
+                    Toast.makeText(this, "Cannot retrieve current location\nwithout permission", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     @Override

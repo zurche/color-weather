@@ -78,11 +78,7 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     private boolean canUpdateForecast() {
         if (mLastRetrievedDateStamp != null && mFiveDayForecast != null) {
-            if (System.currentTimeMillis() - mLastRetrievedDateStamp.getTime() > TEN_MINUTES) {
-                return true;
-            } else {
-                return false;
-            }
+            return System.currentTimeMillis() - mLastRetrievedDateStamp.getTime() > TEN_MINUTES;
         } else {
             return true;
         }
