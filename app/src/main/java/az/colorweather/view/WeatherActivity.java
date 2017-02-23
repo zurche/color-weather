@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
@@ -27,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
 
@@ -106,6 +109,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     private void checkLocationPermissions() {
+        loading_weather_progress.setVisibility(View.VISIBLE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             retrieveLatestKnownLocationAndCheckFiveDayWeather();
@@ -155,7 +159,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         super.onResume();
         setupFiveDaySelectedUi();
 
-        loading_weather_progress.setVisibility(View.VISIBLE);
+
     }
 
     @OnClick(R.id.today_button)
