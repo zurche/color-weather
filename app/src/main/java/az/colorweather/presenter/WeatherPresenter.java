@@ -30,6 +30,10 @@ public class WeatherPresenter implements WeatherContract.Presenter {
 
     private static final String TAG = WeatherPresenter.class.getSimpleName();
     public static final int TEN_MINUTES = 600000;
+    public static final String CLOUDY = "cloudy";
+    public static final String SUNNY = "sunny";
+    public static final String RAINY = "rainy";
+    public static final String PARTIALLY_CLOUDY = "partially cloudy";
     private WeatherContract.View view;
     private SimpleDateFormat weatherDateStampFormat;
     private OWService mOWService;
@@ -170,10 +174,11 @@ public class WeatherPresenter implements WeatherContract.Presenter {
             ForecastDay tempForecast = new ForecastDay(dayName,
                     "" + currentDay + "/" + currentMonth,
                     currentHour,
-                    roundedTemp);
+                    roundedTemp,
+                    parseWeatherDescription(element.getWeather().get(0).getDescription()));
 
             //If it is the first temp of the day, then add it
-            if(sortedTemperaturesMap.get(currentDay) == null) {
+            if (sortedTemperaturesMap.get(currentDay) == null) {
                 sortedTemperaturesMap.put(currentDay, tempForecast);
                 //Otherwise check if the current checked temp for this day is greater than
                 //the already stored one, if that's true, then replace the current day greatest temp.
@@ -214,7 +219,8 @@ public class WeatherPresenter implements WeatherContract.Presenter {
                     new ForecastDay(dayName,
                             "" + currentDay + "/" + currentMonth,
                             currentHour,
-                            roundedTemp));
+                            roundedTemp,
+                            parseWeatherDescription(element.getWeather().get(0).getDescription())));
 
             currentDayCount++;
 
@@ -226,4 +232,22 @@ public class WeatherPresenter implements WeatherContract.Presenter {
         return upcomingFiveForecasts;
     }
 
+    private String parseWeatherDescription(String description) {
+        switch (description) {
+            case "mist":
+            case "scattered clouds":
+                return CLOUDY;
+            case "clear sky":
+                return SUNNY;
+            case "shower rain":
+            case "rain":
+            case "thunderstorm":
+            case "snow":
+                return RAINY;
+            case "few clouds":
+            case "broken clouds":
+                return PARTIALLY_CLOUDY;
+        }
+        return CLOUDY;
+    }
 }

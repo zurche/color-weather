@@ -39,4 +39,6 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     compile 'com.github.zurche:open-weather-map-android-wrapper:v0.1'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

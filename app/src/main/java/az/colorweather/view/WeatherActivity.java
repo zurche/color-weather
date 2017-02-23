@@ -8,14 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
-import java.util.Observable;
 
 import az.colorweather.R;
 import az.colorweather.WeatherContract;
@@ -29,11 +30,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View {
 
     private static final String TAG = WeatherActivity.class.getSimpleName();
+
     public static final int FIRST_DAY_INDEX = 0;
     public static final int SECOND_DAY_INDEX = 1;
     public static final int THIRD_DAY_INDEX = 2;
@@ -96,6 +97,19 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @BindView(R.id.loading_weather_progress)
     ProgressBar loading_weather_progress;
 
+    @BindView(R.id.current_weather_icon)
+    ImageView current_weather_icon;
+    @BindView(R.id.first_day_icon)
+    ImageView first_day_icon;
+    @BindView(R.id.second_day_icon)
+    ImageView second_day_icon;
+    @BindView(R.id.third_day_icon)
+    ImageView third_day_icon;
+    @BindView(R.id.fourth_day_icon)
+    ImageView fourth_day_icon;
+    @BindView(R.id.fifth_day_icon)
+    ImageView fifth_day_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +123,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     }
 
     private void checkLocationPermissions() {
-        loading_weather_progress.setVisibility(View.VISIBLE);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             retrieveLatestKnownLocationAndCheckFiveDayWeather();
@@ -158,8 +172,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     protected void onResume() {
         super.onResume();
         setupFiveDaySelectedUi();
-
-
     }
 
     @OnClick(R.id.today_button)
@@ -238,30 +250,53 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         first_forecast.setText(tempWithDegrees);
         first_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIRST_DAY_INDEX).getTemperature())));
+        setupWeatherIcon(first_day_icon, forecastDays.get(FIRST_DAY_INDEX).getIcon());
+        setupWeatherIcon(current_weather_icon, forecastDays.get(FIRST_DAY_INDEX).getIcon());
 
         tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(SECOND_DAY_INDEX).getTemperature());
         second_forecast.setText(tempWithDegrees);
         second_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(SECOND_DAY_INDEX).getTemperature())));
         second_forecast_day.setText(forecastDays.get(SECOND_DAY_INDEX).getDay());
         second_forecast_day_month.setText(forecastDays.get(SECOND_DAY_INDEX).getDayMonth());
+        setupWeatherIcon(second_day_icon, forecastDays.get(SECOND_DAY_INDEX).getIcon());
 
         tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(THIRD_DAY_INDEX).getTemperature());
         third_forecast.setText(tempWithDegrees);
         third_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(THIRD_DAY_INDEX).getTemperature())));
         third_forecast_day.setText(forecastDays.get(THIRD_DAY_INDEX).getDay());
         third_forecast_day_month.setText(forecastDays.get(THIRD_DAY_INDEX).getDayMonth());
+        setupWeatherIcon(third_day_icon, forecastDays.get(THIRD_DAY_INDEX).getIcon());
 
         tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FOURTH_DAY_INDEX).getTemperature());
         fourth_forecast.setText(tempWithDegrees);
         fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FOURTH_DAY_INDEX).getTemperature())));
         fourth_forecast_day.setText(forecastDays.get(FOURTH_DAY_INDEX).getDay());
         fourth_forecast_day_month.setText(forecastDays.get(FOURTH_DAY_INDEX).getDayMonth());
+        setupWeatherIcon(fourth_day_icon, forecastDays.get(FOURTH_DAY_INDEX).getIcon());
 
         tempWithDegrees = String.format(getString(R.string.degrees_placeholder), forecastDays.get(FIFTH_DAY_INDEX).getTemperature());
         fifth_forecast.setText(tempWithDegrees);
         fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(forecastDays.get(FIFTH_DAY_INDEX).getTemperature())));
         fifth_forecast_day.setText(forecastDays.get(FIFTH_DAY_INDEX).getDay());
         fifth_forecast_day_month.setText(forecastDays.get(FIFTH_DAY_INDEX).getDayMonth());
+        setupWeatherIcon(fifth_day_icon, forecastDays.get(FIFTH_DAY_INDEX).getIcon());
+    }
+
+    private void setupWeatherIcon(ImageView imageView, String icon) {
+        switch (icon) {
+            case WeatherPresenter.SUNNY:
+                Picasso.with(this).load(R.drawable.sunny).into(imageView);
+                break;
+            case WeatherPresenter.CLOUDY:
+                Picasso.with(this).load(R.drawable.cloudy).into(imageView);
+                break;
+            case WeatherPresenter.PARTIALLY_CLOUDY:
+                Picasso.with(this).load(R.drawable.partially_cloudy).into(imageView);
+                break;
+            case WeatherPresenter.RAINY:
+                Picasso.with(this).load(R.drawable.rainy).into(imageView);
+                break;
+        }
     }
 
     private void enableModeButtons() {
@@ -277,26 +312,32 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         first_forecast.setText(degrees);
         first_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIRST_DAY_INDEX).getTemperature())));
+        setupWeatherIcon(first_day_icon, currentWeather.get(FIRST_DAY_INDEX).getIcon());
+        setupWeatherIcon(current_weather_icon, currentWeather.get(FIRST_DAY_INDEX).getIcon());
 
         degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(SECOND_DAY_INDEX).getTemperature());
         second_forecast.setText(degrees);
         second_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(SECOND_DAY_INDEX).getTemperature())));
         second_forecast_day.setText(currentWeather.get(SECOND_DAY_INDEX).getHourOfForecast());
+        setupWeatherIcon(second_day_icon, currentWeather.get(SECOND_DAY_INDEX).getIcon());
 
         degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(THIRD_DAY_INDEX).getTemperature());
         third_forecast.setText(degrees);
         third_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(THIRD_DAY_INDEX).getTemperature())));
         third_forecast_day.setText(currentWeather.get(THIRD_DAY_INDEX).getHourOfForecast());
+        setupWeatherIcon(third_day_icon, currentWeather.get(THIRD_DAY_INDEX).getIcon());
 
         degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FOURTH_DAY_INDEX).getTemperature());
         fourth_forecast.setText(degrees);
         fourth_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FOURTH_DAY_INDEX).getTemperature())));
         fourth_forecast_day.setText(currentWeather.get(FOURTH_DAY_INDEX).getHourOfForecast());
+        setupWeatherIcon(fourth_day_icon, currentWeather.get(FOURTH_DAY_INDEX).getIcon());
 
         degrees = String.format(getString(R.string.degrees_placeholder), currentWeather.get(FIFTH_DAY_INDEX).getTemperature());
         fifth_forecast.setText(degrees);
         fifth_forecast.setTextColor(getColor(presenter.getColorForTemp(currentWeather.get(FIFTH_DAY_INDEX).getTemperature())));
         fifth_forecast_day.setText(currentWeather.get(FIFTH_DAY_INDEX).getHourOfForecast());
+        setupWeatherIcon(fifth_day_icon, currentWeather.get(FIFTH_DAY_INDEX).getIcon());
     }
 
     @Override
